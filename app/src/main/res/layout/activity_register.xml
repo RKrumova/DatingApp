@@ -9,7 +9,7 @@
     tools:context=".RegisterActivity">
 
     <TextView
-        android:id="@+id/loginTV"
+        android:id="@+id/tvTitail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="164dp"
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/inputPassword1"
+        android:id="@+id/inputPassword1_rg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="18dp"
@@ -81,7 +81,7 @@
         tools:ignore="HardcodedText" />
 
     <EditText
-        android:id="@+id/inputUsername"
+        android:id="@+id/inputUsername_rg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="18dp"
@@ -124,7 +124,7 @@
         app:layout_constraintTop_toBottomOf="@+id/inputEmail" />
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/button_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/input_bg"
@@ -140,7 +140,7 @@
         app:layout_constraintVertical_bias="0.17000002" />
 
     <TextView
-        android:id="@+id/toRegisterTV"
+        android:id="@+id/toLoginTV_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/input_bg"
@@ -153,13 +153,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_login" />
+        app:layout_constraintTop_toBottomOf="@+id/button_register" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="inputUsername,inputPassword1,inputEmail,inputPassword2,checkBox,button_login,toRegisterTV" />
+        app:constraint_referenced_ids="inputUsername_rg,inputPassword1_rg,inputEmail,inputPassword2,checkBox,button_register,toLoginTV_register"
+        tools:ignore="UnknownId" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
