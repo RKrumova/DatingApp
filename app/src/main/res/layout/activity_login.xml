@@ -12,21 +12,23 @@
         android:id="@+id/loginTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
         android:text="Login"
         android:textColor="@color/sky_blue_compliments"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/inputUsername"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.536"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.82" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/inputPassword1"
+        android:id="@+id/inputPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/input_bg"
         android:drawableStart="@drawable/baseline_security"
         android:drawablePadding="10dp"
@@ -38,9 +40,9 @@
         android:paddingEnd="10dp"
         android:paddingBottom="20dp"
         android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/toRestartPassTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="349dp"
         tools:ignore="HardcodedText,MissingConstraints" />
 
     <EditText
@@ -58,23 +60,16 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/inputPassword1"
+        app:layout_constraintBottom_toTopOf="@+id/inputPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="TouchTargetSizeCheck" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="inputUsername,inputPassword1" />
+        app:constraint_referenced_ids="inputUsername,inputPassword" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -87,35 +82,37 @@
         android:id="@+id/toRestartPassTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="18dp"
         android:text="Forgot password"
-        app:layout_constraintTop_toBottomOf="@+id/inputPassword1"
-        tools:ignore="HardcodedText,MissingConstraints"
-        tools:layout_editor_absoluteX="256dp" />
+        app:layout_constraintBottom_toTopOf="@+id/button_Login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.67"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="HardcodedText,MissingConstraints" />
 
     <Button
         android:id="@+id/button_Login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="30dp"
         android:paddingLeft="20dp"
         android:text="Login"
         android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toRestartPassTV" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayoutRegister"
         android:layout_width="224dp"
         android:layout_height="23dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="300dp"
         android:orientation="horizontal"
         android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/button_Login"
         app:layout_constraintHorizontal_bias="0.47"
-        app:layout_constraintStart_toStartOf="@+id/button_Login"
-        app:layout_constraintTop_toBottomOf="@+id/button_Login">
+        app:layout_constraintStart_toStartOf="@+id/button_Login">
 
         <TextView
             android:layout_width="wrap_content"
@@ -143,10 +140,12 @@
         android:layout_marginEnd="10dp"
         android:text="Google"
         android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnFacebook"
         app:layout_constraintHorizontal_bias="0.56"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutRegister"
+        app:layout_constraintVertical_bias="0.19999999" />
 
     <Button
         android:id="@+id/btnFacebook"
@@ -156,7 +155,29 @@
         android:layout_marginEnd="48dp"
         android:text="Facebook"
         android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutRegister"
+        app:layout_constraintVertical_bias="0.19" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="signUpTV" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="140dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,12 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         button_register = findViewById(R.id.button_register);
 
 
-        button_register.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkCredentials();
-            }
-        }));
+        button_register.setOnClickListener((view -> checkCredentials()));
         toLoginTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

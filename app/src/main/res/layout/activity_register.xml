@@ -12,15 +12,16 @@
         android:id="@+id/tvTitail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
+        android:layout_marginBottom="30dp"
         android:text="Register"
         android:textColor="@color/sky_blue_compliments"
         android:textSize="34sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/inputUsername_rg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.61" />
 
     <EditText
         android:id="@+id/inputPassword2"
@@ -64,7 +65,7 @@
         android:id="@+id/inputEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="18dp"
         android:background="@drawable/input_bg"
         android:drawableStart="@drawable/baseline_email"
         android:drawablePadding="10dp"
@@ -77,6 +78,7 @@
         android:paddingBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/checkBox"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="HardcodedText" />
 
@@ -95,7 +97,7 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/inputPassword1"
+        app:layout_constraintBottom_toTopOf="@+id/inputPassword1_rg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="TouchTargetSizeCheck" />
@@ -105,39 +107,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_end="731dp" />
 
     <CheckBox
         android:id="@+id/checkBox"
-        android:layout_width="wrap_content"
-        android:layout_height="59dp"
-        android:layout_marginTop="13dp"
+        android:layout_width="208dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/input_bg"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="20dp"
         android:text="I agree with rules"
+        app:layout_constraintBottom_toTopOf="@+id/button_register"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputEmail" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
         android:background="@drawable/input_bg"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="20dp"
         android:text="Register"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/toLoginTV_register"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox"
-        app:layout_constraintVertical_bias="0.17000002" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/toLoginTV_register"
@@ -152,8 +153,7 @@
         android:text="Already have an account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_register" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group"
@@ -167,5 +167,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_end="591dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
