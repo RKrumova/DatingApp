@@ -1,8 +1,10 @@
 package com.example.tinder2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +14,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,6 +32,9 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnGoogle;
     private Button btnFacebook;
     private LinearLayout toRegisterLL;
+    private FirebaseAuth mAuth;
+
+    private ProgressDialog mLoadingBar;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         Button btnGoogle = findViewById(R.id.btnGoogle);
         Button btnFacebook = findViewById(R.id.btnFacebook);
         LinearLayout toRegisterLL = findViewById(R.id.linearLayoutRegister);
-
+        mAuth  = FirebaseAuth.getInstance();
+        mLoadingBar = new ProgressDialog(LoginActivity.this);
         checkCredentials();
         toRegisterLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +67,25 @@ public class LoginActivity extends AppCompatActivity {
             showError(inputPassword, "Your password isn't strong enough");
         }
         else{
+            mLoadingBar.setTitle("Login");
+            mLoadingBar.setMessage("Please wait, while we check your credentials");
+            mLoadingBar.setCanceledOnTouchOutside(false);
+            mLoadingBar.show();
+            mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        System.out.println("Don't forget to change not to go to MainActivity but to chat/swipe");
+                        mLoadingBar.dismiss();
+                        Toast.makeText(LoginActivity.this, "Successfully registration", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             Toast.makeText(this, "Call registration method", Toast.LENGTH_SHORT).show();
         }
 

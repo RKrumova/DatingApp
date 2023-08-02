@@ -2,6 +2,8 @@ package com.example.tinder2;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,7 +18,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.apache.commons.lang3.StringUtils;
 import java.util.regex.Pattern;
@@ -30,8 +31,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText inputEmail;
     CheckBox checkBox;
     Button button_register;
-    private FirebaseDatabaseHelper firebaseDatabaseHelper;
     private FirebaseAuth mAuth;
+    private ProgressDialog mLoadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,8 @@ public class RegisterActivity extends AppCompatActivity {
         inputEmail = findViewById(R.id.inputEmail);
         checkBox = findViewById(R.id.checkBox);
         button_register = findViewById(R.id.button_register);
-        firebaseDatabaseHelper = new FirebaseDatabaseHelper(this);
+        mAuth = FirebaseAuth.getInstance();
+        mLoadingBar = new ProgressDialog(RegisterActivity.this);
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,24 +82,27 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!checkBox.isChecked()) {
             checkBox.setTextColor(Color.RED);
         } else {
-            // Call registration method
-            firebaseDatabaseHelper = new FirebaseDatabaseHelper(this);
-            firebaseDatabaseHelper.registerUser(username, password, new OnCompleteListener<AuthResult>() {
+            mLoadingBar.setTitle("Registration");
+            mLoadingBar.setMessage("Please wait, while we check your credentials");
+            mLoadingBar.setCanceledOnTouchOutside(false);
+            mLoadingBar.show();
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        //can get UI to navigate to chat or swipe activity
-                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         System.out.println("Don't forget to change not to go to MainActivity but to chat/swipe");
-                        finish();
+
+                        Toast.makeText(RegisterActivity.this, "Successfully registration", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                     } else {
-                            Toast.makeText(RegisterActivity.this, "User registration failed.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "User registration failed.", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-            Toast.makeText(this, "" +
-                    "Call registration method", Toast.LENGTH_SHORT).show();
+
         }
     }
 
