@@ -65,13 +65,13 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
+    public String username = inputUsername.getText().toString();
     private void checkCredentials() {
-        String username = inputUsername.getText().toString();
         String email = inputEmail.getText().toString();
         String password = inputPassword1.getText().toString();
         String secondPassword = inputPassword2.getText().toString();
 
-        if (username.isEmpty() || username.length() < 7 || !StringUtils.isAlphanumeric(username)) {
+        if (username.isEmpty() || username.length() < 5 || !StringUtils.isAlphanumeric(username)) {
             showError(inputUsername, "Your username is not valid");
         } else if (!isEmailValid(email)) {
             showError(inputEmail, "Email is not valid");

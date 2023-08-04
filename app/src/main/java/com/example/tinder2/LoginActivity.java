@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        TextView loginTV = findViewById(R.id.loginTV);
         inputUsername = findViewById(R.id.inputUsername);
         inputPassword = findViewById(R.id.inputPassword);
         Button button_Login = findViewById(R.id.button_Login);
@@ -50,7 +49,13 @@ public class LoginActivity extends AppCompatActivity {
         LinearLayout toRegisterLL = findViewById(R.id.linearLayoutRegister);
         mAuth  = FirebaseAuth.getInstance();
         mLoadingBar = new ProgressDialog(LoginActivity.this);
-        checkCredentials();
+        button_Login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkCredentials();
+            }
+        });
+
         toRegisterLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,15 +63,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    public String username = inputUsername.getText().toString();
     private void checkCredentials() {
-        String username = inputUsername.getText().toString();
         String password = inputPassword.getText().toString();
-        if (username.isEmpty() || username.length()<7  || !StringUtils.isAlphanumeric(username)) {
+        /*if (username.isEmpty() || username.length()<5  || !StringUtils.isAlphanumeric(username)) {
             showError(inputUsername, "Your username is not valid");
         } else if (password.isEmpty() || password.length() < 4 || password.length() > 20) {
             showError(inputPassword, "Your password isn't strong enough");
         }
-        else{
+        else{*/
             mLoadingBar.setTitle("Login");
             mLoadingBar.setMessage("Please wait, while we check your credentials");
             mLoadingBar.setCanceledOnTouchOutside(false);
@@ -87,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
             Toast.makeText(this, "Call registration method", Toast.LENGTH_SHORT).show();
-        }
+        //}
 
     }
     private void showError(EditText input, String s) {

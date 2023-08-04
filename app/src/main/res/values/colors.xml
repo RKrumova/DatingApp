@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="bg_color">#ffbae9</color>
+    <color name="bg_second_color">#4DFFBAE9</color>
     <color name="sky_blue_compliments">#87ceeb</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
