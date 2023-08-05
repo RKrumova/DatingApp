@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_second_color"
+    android:clipToPadding="true"
+    tools:context=".Account.SettingActivity">
+
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:background="@color/bg_color"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/useless_imageView2"
+            android:layout_width="93dp"
+            android:layout_height="69dp"
+            android:layout_marginTop="-5dp"
+            app:srcCompat="@drawable/icon" />
+
+        <TextView
+            android:id="@+id/useless_textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1.5"
+            android:text="Settings"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/sendMessageIcon"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:backgroundTint="@color/bg_color"
+            android:text="Messages"
+            app:icon="@drawable/send_message" />
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/profilePicCurrentUser"
+        android:layout_width="156dp"
+        android:layout_height="122dp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerLayout"
+        app:srcCompat="@drawable/baseline_person_24" />
+
+    <EditText
+        android:id="@+id/birthDateTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePicCurrentUser" />
+
+    <LinearLayout
+        android:id="@+id/genderLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/birthDateTV">
+
+        <RadioButton
+            android:id="@+id/maleRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/femaleRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female" />
+
+        <RadioButton
+            android:id="@+id/otherRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other" />
+    </LinearLayout>
+
+    <AutoCompleteTextView
+        android:id="@+id/address_TV"
+        android:layout_width="212dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="15dp"
+        android:hint="Address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/genderLayout" />
+
+    <Spinner
+        android:id="@+id/sexualitySpinner"
+        android:layout_width="207dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="14dp"
+        android:entries="@array/sexuality_options"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/address_TV" />
+
+    <CheckBox
+        android:id="@+id/showSexualOrientationCheckBox"
+        android:layout_width="215dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="20dp"
+        android:text="Show Sexual Orientation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sexualitySpinner" />
+
+    <CheckBox
+        android:id="@+id/showLocationCheckBox"
+        android:layout_width="124dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:text="Show Location"
+        app:layout_constraintEnd_toStartOf="@+id/showGenderCheckBox"
+        app:layout_constraintHorizontal_bias="0.829"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showSexualOrientationCheckBox" />
+
+    <CheckBox
+        android:id="@+id/showGenderCheckBox"
+        android:layout_width="125dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="70dp"
+        android:text="Show Gender"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showSexualOrientationCheckBox" />
+
+    <Button
+        android:id="@+id/SaveChangesbutton"
+        android:layout_width="175dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="45dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Update profile"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showSexualOrientationCheckBox" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

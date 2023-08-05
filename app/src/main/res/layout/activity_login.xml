@@ -5,7 +5,8 @@
     android:id="@+id/signUpTV"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@color/bg_second_color">
 
 
     <TextView
@@ -97,6 +98,8 @@
         android:layout_marginBottom="30dp"
         android:paddingLeft="20dp"
         android:text="Login"
+        android:backgroundTint="@color/bg_color"
+        android:textColor="@color/white"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/linearLayoutRegister"
         app:layout_constraintEnd_toEndOf="parent"
@@ -139,6 +142,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:text="Google"
+        android:backgroundTint="@color/bg_color"
+        android:textColor="@color/white"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnFacebook"
@@ -154,6 +159,8 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="48dp"
         android:text="Facebook"
+        android:backgroundTint="@color/bg_color"
+        android:textColor="@color/white"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -171,7 +178,8 @@
         android:id="@+id/flow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="signUpTV" />
+        app:constraint_referenced_ids="signUpTV"
+        tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"

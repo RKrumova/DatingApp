@@ -34,7 +34,7 @@
             android:textSize="30sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/sendMessageIcon"
+            android:id="@+id/userProfilePic"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"

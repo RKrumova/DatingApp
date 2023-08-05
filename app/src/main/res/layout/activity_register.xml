@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@color/bg_color"
+    android:background="@color/bg_second_color"
     tools:context=".RegisterActivity">
 
     <TextView
@@ -44,6 +44,7 @@
         android:paddingRight="10dp"
         android:paddingBottom="20dp"
         android:text="Already have an account"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -53,12 +54,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/input_bg"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="20dp"
         android:text="Register"
+        android:backgroundTint="@color/bg_color"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/toLoginTV_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
