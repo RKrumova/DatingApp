@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +23,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
-//get username somehow
+    String username = getIntent().getStringExtra("username");
+    ImageView log_outIV;
     RecyclerView messagesRecyclerView;
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://dating-app-bfd70-default-rtdb.firebaseio.com/");
 
@@ -30,6 +34,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         FirebaseApp.initializeApp(this);
+        log_outIV = findViewById(R.id.log_out_imageView);
         messagesRecyclerView = findViewById(R.id.messagesRecyclerView);
         messagesRecyclerView.setHasFixedSize(true);
         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -44,6 +49,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 final String profilePicUrl = snapshot.child("users").child("username").child("profile_pic").getValue(String.class);
                 Picasso.get().load(profilePicUrl).into(userProfilePic);
+
                 progressDialog.dismiss();
             }
 
@@ -52,6 +58,24 @@ public class ChatActivity extends AppCompatActivity {
                 progressDialog.dismiss();
             }
         });
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //here 36:55
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        log_outIV.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(ChatActivity.this, LoginActivity.class));
+            /*moveTaskToBack(true);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);*/
+        });
     }
 }

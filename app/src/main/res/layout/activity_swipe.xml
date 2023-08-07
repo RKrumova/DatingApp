@@ -18,11 +18,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/useless_imageView2"
+            android:id="@+id/log_out_imageView"
             android:layout_width="93dp"
             android:layout_height="69dp"
             android:layout_marginTop="-5dp"
-            app:srcCompat="@drawable/icon" />
+            app:srcCompat="@drawable/log_out"
+            tools:srcCompat="@drawable/log_out" />
 
         <TextView
             android:id="@+id/useless_textView2"
@@ -100,7 +101,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/likeButton"
         app:layout_constraintVertical_bias="0.145" />
+
     <include
         android:id="@+id/include2"
-        layout="@layout/activity_status_bars" />
+        layout="@layout/activity_status_bars"
+        android:layout_width="415dp"
+        android:layout_height="54dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="677dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

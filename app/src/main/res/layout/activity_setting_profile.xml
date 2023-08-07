@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/useless_imageView2"
+            android:id="@+id/log_out_imageView"
             android:layout_width="93dp"
             android:layout_height="69dp"
             android:layout_marginTop="-5dp"

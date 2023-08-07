@@ -1,13 +1,9 @@
 package com.example.tinder2;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,9 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tinder2.Account.SettingActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +27,6 @@ public class RegisterActivity extends AppCompatActivity {
     Button button_register;
     private FirebaseAuth mAuth;
     private ProgressDialog mLoadingBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,25 +40,15 @@ public class RegisterActivity extends AppCompatActivity {
         button_register = findViewById(R.id.button_register);
         mAuth = FirebaseAuth.getInstance();
         mLoadingBar = new ProgressDialog(RegisterActivity.this);
-        button_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkCredentials();
-            }
-        });
-        toLoginTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-            }
-        });
+        button_register.setOnClickListener(view -> checkCredentials());
+        toLoginTV.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
 
 
     }
 
 
 
-    public String username = inputUsername.getText().toString();
+    private String username = inputUsername.getText().toString();
     private void checkCredentials() {
         String email = inputEmail.getText().toString();
         String password = inputPassword1.getText().toString();
@@ -78,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
             showError(inputEmail, "Email is not valid");
         } else if (password.isEmpty() || password.length() < 4 || password.length() > 20) {
             showError(inputPassword1, "Your password isn't strong enough");
-        } else if (!password.equals(secondPassword) || secondPassword.isEmpty()) {
+        } else if (!password.equals(secondPassword)) {
             showError(inputPassword2, "Your passwords don't match");
         } else if (!checkBox.isChecked()) {
             checkBox.setTextColor(Color.RED);
@@ -87,20 +69,17 @@ public class RegisterActivity extends AppCompatActivity {
             mLoadingBar.setMessage("Please wait, while we check your credentials");
             mLoadingBar.setCanceledOnTouchOutside(false);
             mLoadingBar.show();
-            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    System.out.println("Don't forget to change not to go to MainActivity but to chat/swipe");
 
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
-                        System.out.println("Don't forget to change not to go to MainActivity but to chat/swipe");
-
-                        Toast.makeText(RegisterActivity.this, "Successfully registration", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(RegisterActivity.this, SettingActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(RegisterActivity.this, "User registration failed.", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(RegisterActivity.this, "Successfully registration", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RegisterActivity.this, SettingActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(RegisterActivity.this, "User registration failed.", Toast.LENGTH_SHORT).show();
                 }
             });
 
