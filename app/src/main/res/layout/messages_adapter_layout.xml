@@ -20,22 +20,24 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="40dp"
+                android:layout_marginEnd="291dp"
+                android:layout_toStartOf="@+id/unseenMessages"
                 android:src="@drawable/user_icon" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="282dp"
+                android:layout_height="79dp"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="-320dp"
-                android:layout_marginEnd="50dp"
+                android:layout_marginStart="-280dp"
+                android:layout_marginEnd="30dp"
                 android:layout_toStartOf="@+id/unseenMessages"
                 android:layout_toEndOf="@+id/profilePic"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/name_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="230dp"
+                    android:layout_height="38dp"
                     android:maxLines="1"
                     android:text="full name"
                     android:textSize="18sp"
@@ -44,7 +46,7 @@
                 <TextView
                     android:id="@+id/lastMessage_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="33dp"
                     android:layout_marginTop="5dp"
                     android:maxLines="1"
                     android:text="this is last message"
@@ -65,5 +67,12 @@
                 android:gravity="center"
                 android:background="@drawable/baseline_circle_24"/>
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="#14000000"/>
+
     </LinearLayout>
 </RelativeLayout>

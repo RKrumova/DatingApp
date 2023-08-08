@@ -4,18 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
+import de.hdodenhof.circleimageview.CircleImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tinder2.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
     private List<MessagesList> messagesLists;
     private Context context;
@@ -33,7 +30,17 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MessagesAdapter.MyViewHolder holder, int position) {
-
+        MessagesList list = messagesLists.get(position);
+        if(!list.getProfilePic().isEmpty()){
+            Picasso.get().load(list.getProfilePic()).into(holder.profilePic);
+        }
+        holder.username.setText(list.getUsername());
+        holder.lastMessage.setText(list.getLastMessage());
+        if(list.getUnseenMessages() == 0){
+            holder.unseenMessages.setVisibility(View.GONE);
+        } else {
+            holder.unseenMessages.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -42,13 +49,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     }
     static class MyViewHolder extends  RecyclerView.ViewHolder {
         private CircleImageView profilePic;
-        private TextView name;
+        private TextView username;
         private TextView lastMessage;
         private TextView unseenMessages;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             profilePic = itemView.findViewById(R.id.profilePic);
-            name  = itemView.findViewById(R.id.name_tv);
+            username = itemView.findViewById(R.id.name_tv);
             lastMessage = itemView.findViewById(R.id.lastMessage_tv);
             unseenMessages = itemView.findViewById(R.id.unseenMessages);
         }

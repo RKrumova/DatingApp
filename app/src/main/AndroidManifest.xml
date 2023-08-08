@@ -6,9 +6,11 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -24,11 +26,14 @@
         android:theme="@style/Theme.Tinder2"
         tools:targetApi="31">
         <activity
+            android:name=".conversation.ConversationActivity"
+            android:exported="false" />
+        <activity
             android:name=".Account.SettingActivity"
             android:exported="false" />
         <activity
             android:name=".StatusBars_Activity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".ChatActivity"
             android:exported="false" />

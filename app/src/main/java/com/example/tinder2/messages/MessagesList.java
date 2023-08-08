@@ -1,12 +1,11 @@
 package com.example.tinder2.messages;
 
 public class MessagesList {
-    private String username, email, lastMessage, profilePic;
+    private String username, lastMessage, profilePic;
     private int unseenMessages;
 
-    public MessagesList(String username, String email, String lastMessage,String profilePic, int unseenMessages) {
+    public MessagesList(String username, String lastMessage,String profilePic, int unseenMessages) {
         this.username = username;
-        this.email = email;
         this.lastMessage = lastMessage;
         this.profilePic = profilePic;
         this.unseenMessages = unseenMessages;
@@ -16,9 +15,6 @@ public class MessagesList {
         return username;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
     public String getLastMessage() {
         return lastMessage;
