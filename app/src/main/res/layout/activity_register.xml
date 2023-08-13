@@ -12,7 +12,6 @@
         android:id="@+id/tvTitail"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_marginTop="95dp"
         android:layout_marginBottom="30dp"
         android:text="Register"
         android:textColor="@color/sky_blue_compliments"
@@ -22,8 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.53" />
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -111,7 +109,7 @@
         android:id="@+id/inputUsername_rg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/input_bg"
         android:drawableStart="@drawable/baseline_person_24"
         android:drawablePadding="10dp"
@@ -176,5 +174,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="591dp" />
+        app:layout_constraintGuide_percent="0.10" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,7 @@
 package com.example.tinder2;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import com.example.tinder2.Account.SettingActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.apache.commons.lang3.StringUtils;
+
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -27,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button button_register;
     private FirebaseAuth mAuth;
     private ProgressDialog mLoadingBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,16 +47,12 @@ public class RegisterActivity extends AppCompatActivity {
         button_register.setOnClickListener(view -> checkCredentials());
         toLoginTV.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
 
-
     }
-
-
-
-    private String username = inputUsername.getText().toString();
     private void checkCredentials() {
         String email = inputEmail.getText().toString();
         String password = inputPassword1.getText().toString();
         String secondPassword = inputPassword2.getText().toString();
+        String username = inputUsername.getText().toString();
 
         if (username.isEmpty() || username.length() < 5 || !StringUtils.isAlphanumeric(username)) {
             showError(inputUsername, "Your username is not valid");
@@ -70,12 +70,12 @@ public class RegisterActivity extends AppCompatActivity {
             mLoadingBar.setCanceledOnTouchOutside(false);
             mLoadingBar.show();
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     System.out.println("Don't forget to change not to go to MainActivity but to chat/swipe");
 
                     Toast.makeText(RegisterActivity.this, "Successfully registration", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, SettingActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("username", username);
                     startActivity(intent);
                 } else {

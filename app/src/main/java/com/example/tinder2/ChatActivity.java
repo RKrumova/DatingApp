@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.example.tinder2.Account.MemoryData;
 import com.example.tinder2.messages.MessagesAdapter;
 import com.example.tinder2.messages.MessagesList;
 import com.google.firebase.FirebaseApp;
@@ -34,6 +35,11 @@ public class ChatActivity extends AppCompatActivity {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://dating-app-bfd70-default-rtdb.firebaseio.com/");
     //    https://dating-app-bfd70-default-rtdb.firebaseio.com/
     final private List<MessagesList> messLists = new ArrayList<>();
+    private int unseenMessages;
+    private String lastMessage;
+    private MessagesAdapter messagesAdapter;
+    private String convoKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,8 @@ public class ChatActivity extends AppCompatActivity {
         messagesRecyclerView = findViewById(R.id.messagesRecyclerView);
         messagesRecyclerView.setHasFixedSize(true);
         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        messagesAdapter = new MessagesAdapter(messLists, ChatActivity.this);
+        messagesRecyclerView.setAdapter(messagesAdapter);
         ProgressDialog progressDialog =  new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setTitle("Loading...");
@@ -67,17 +75,51 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 messLists.clear();
+                unseenMessages = 0;
+                lastMessage = "";
+                convoKey = "";
                 for(DataSnapshot dataSnapshot : snapshot.child("users").getChildren()){
                     String getUsername = dataSnapshot.getKey();
                     if(!getUsername.equals(username)){ //check if current user is different from user from database
                         String getName = dataSnapshot.child("username").getValue(String.class);
                         String getProfilePic = String.valueOf(dataSnapshot.child("profile_pic"));
-                        //user - last message - pic - unseen
-                        MessagesList messagesList = new MessagesList(getName, "", getProfilePic, 0); //class with the extracted data (username, profile picture URL) and a default value of 0 for unseen messages
-                        messLists.add(messagesList);
+
+                        databaseReference.child("chat").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                int getChatCount = (int) snapshot.getChildrenCount();
+                                if (getChatCount > 0){
+                                    for (DataSnapshot dataSnapshot1 : snapshot.getChildren()){
+
+                                        final String getKey = dataSnapshot1.getKey();
+                                        convoKey = getKey;
+                                        final String getUserOne = dataSnapshot1.child("user_1").getValue(String.class);
+                                        final String getUserTwo = dataSnapshot1.child("user_2").getValue(String.class);
+                                        if(getUserOne.equals(getUsername) && getUserTwo.equals(username)
+                                                || getUserOne.equals(username) && getUserTwo.equals(getUsername)){
+                                            for (DataSnapshot convoDataSnapshop : dataSnapshot1.child("messages").getChildren()){
+                                                final long getMessageKey = Long.parseLong(convoDataSnapshop.getKey());
+                                                final long getLastSeenMessage = Long.parseLong(MemoryData.getLastConvo(ChatActivity.this, getKey));
+                                                lastMessage = convoDataSnapshop.child("message").getValue(String.class);
+
+                                                if (getMessageKey > getLastSeenMessage){
+                                                    unseenMessages++;
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+                                MessagesList messagesList = new MessagesList(getName, lastMessage, getProfilePic, unseenMessages, convoKey); //class with the extracted data (username, profile picture URL) and a default value of 0 for unseen messages
+                                messLists.add(messagesList);
+                                messagesAdapter.updateData(messLists);
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
                     }
                 }
-                messagesRecyclerView.setAdapter(new MessagesAdapter(messLists, ChatActivity.this));
 
             }
             @Override

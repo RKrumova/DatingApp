@@ -1,6 +1,7 @@
 package com.example.tinder2.Account;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -30,7 +31,7 @@ import java.util.Date;
 
 public class SettingActivity extends AppCompatActivity {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-    String username = getIntent().getStringExtra("username");
+    String username;
     private EditText birthDateTV;
     private RadioButton maleRadioButton;
     private RadioButton femaleRadioButton;
@@ -43,21 +44,25 @@ public class SettingActivity extends AppCompatActivity {
     private ProgressDialog mLoadingBar;
      private ImageView profile_imageView; //
     private Button saveChangesButton;
-    String birthDate = birthDateTV.getText().toString();
-    boolean isMaleChecked = maleRadioButton.isChecked();
-    boolean isFemaleChecked = femaleRadioButton.isChecked();
-    boolean isOtherChecked = otherRadioButton.isChecked();
-    String location = addressTV.getText().toString();
-    String selectedSexuality = sexualitySpinner.getSelectedItem().toString();
-    boolean isSexualOrientationChecked = showSexualOrientationCheckBox.isChecked();
-    boolean isLocationChecked = showLocationCheckBox.isChecked();
-    boolean isGenderChecked = showGenderCheckBox.isChecked();
+    String birthDate;
+    boolean isMaleChecked;
+    boolean isFemaleChecked;
+    boolean isOtherChecked;
+    String location;
+    String selectedSexuality;
+    boolean isSexualOrientationChecked;
+//    boolean isLocationChecked = showLocationCheckBox.isChecked();
+//    boolean isGenderChecked = showGenderCheckBox.isChecked();
     String gender;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent =getIntent();
+        username = intent.getStringExtra("username");
+
         setContentView(R.layout.activity_setting_profile);
         mLoadingBar = new ProgressDialog(SettingActivity.this);
         profile_imageView = findViewById(R.id.profilePicCurrentUser);
@@ -76,6 +81,8 @@ public class SettingActivity extends AppCompatActivity {
                 R.array.sexuality_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sexualitySpinner.setAdapter(adapter);
+
+
         //if account already register and set up
         if(!MemoryData.getData(this).isEmpty()){
             databaseReference.child("users").child(username);
@@ -114,8 +121,17 @@ public class SettingActivity extends AppCompatActivity {
         addressTV.setText(location);
         birthDateTV.setText(birthdate);
     }
+//check box error
 
     public void checkCredentials() {
+
+        //maybe
+        birthDate = birthDateTV.getText().toString();
+        isMaleChecked = maleRadioButton.isChecked();
+        isFemaleChecked = femaleRadioButton.isChecked();
+        isOtherChecked = otherRadioButton.isChecked();
+        location = addressTV.getText().toString();
+        selectedSexuality = sexualitySpinner.getSelectedItem().toString();
 
 
         if (!isAgeValid(birthDate)) {

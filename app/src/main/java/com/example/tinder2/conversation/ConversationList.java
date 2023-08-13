@@ -1,4 +1,4 @@
 package com.example.tinder2.conversation;
 
-public class Conversation {
+public class ConversationList {
 }
