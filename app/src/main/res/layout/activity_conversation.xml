@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".conversation.ConversationActivity">
     <RelativeLayout
+        android:id="@+id/topPanel"
         android:background="@color/bg_second_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
+            android:contentDescription="back button"
             android:id="@+id/backButton"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -18,7 +20,8 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"
-            android:src="@drawable/back_arrow" />
+            android:src="@drawable/back_arrow"
+            tools:ignore="HardcodedText" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profilePic"
@@ -64,7 +67,19 @@
                 tools:ignore="HardcodedText" />
         </LinearLayout>
     </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/convoRecyclerView"
+        android:layout_below="@+id/topPanel"
+        android:layout_above="@+id/sendMessageLayout">
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
     <RelativeLayout
+        android:id="@+id/sendMessageLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -72,6 +87,8 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
         <EditText
+
+            android:inputType="text"
             android:id="@+id/messageET"
             android:layout_width="match_parent"
             android:layout_height="70dp"
@@ -80,7 +97,8 @@
             android:layout_marginEnd="10dp"
             android:layout_marginStart="20dp"
             android:hint="Type something....."
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            android:autofillHints="" />
         <de.hdodenhof.circleimageview.CircleImageView
 
             android:id="@+id/sendMessageButton"

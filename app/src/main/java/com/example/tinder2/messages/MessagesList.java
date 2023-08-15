@@ -12,11 +12,9 @@ public class MessagesList {
         this.convoKey = convoKey;
 
     }
-
     public String getUsername() {
         return username;
     }
-
 
     public String getLastMessage() {
         return lastMessage;
@@ -33,4 +31,5 @@ public class MessagesList {
     public String getConvoKey() {
         return convoKey;
     }
+
 }

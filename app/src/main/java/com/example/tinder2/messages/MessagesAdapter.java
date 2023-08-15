@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tinder2.R;
 import com.example.tinder2.conversation.ConversationActivity;
-import com.example.tinder2.conversation.ConversationList;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -33,6 +32,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     public MessagesAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.messages_adapter_layout, null));
     }
+    /**When inflating the layout in onCreateViewHolder,
+     *  consider using
+     *  parent.inflate(R.layout.messages_adapter_layout, parent, false) instead of
+     *  LayoutInflater.from(parent.getContext()).inflate(R.layout.messages_adapter_layout, null). This approach provides the correct parent and avoids potential issues with view recycling.*/
 
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
@@ -53,15 +56,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
             holder.lastMessage.setTextColor(context.getResources().getColor(R.color.bg_color));
 
         }
-        holder.rootLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ConversationActivity.class);
-                intent.putExtra("username", list.getUsername());
-                intent.putExtra("profile_pic", list.getProfilePic());
-                intent.putExtra("convo_key", list.getConvoKey());
-                context.startActivity(intent);
-            }
+        holder.rootLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ConversationActivity.class);
+            intent.putExtra("username", list.getUsername());
+            intent.putExtra("profile_pic", list.getProfilePic());
+            intent.putExtra("convo_key", list.getConvoKey());
+            context.startActivity(intent);
         });
     }
     public void updateData(List<MessagesList> messagesLists){
