@@ -39,7 +39,6 @@ public class ChatActivity extends AppCompatActivity {
     private String lastMessage;
     private MessagesAdapter messagesAdapter;
     private RecyclerView messagesRecyclerView;
-
     private ImageView log_outIV;
 
     @Override
@@ -75,13 +74,15 @@ public class ChatActivity extends AppCompatActivity {
                 progressDialog.dismiss();
             }
         });
-        // to complex
-        /**In the loop inside databaseReference.addValueEventListener(),
-         * the logic is a bit complex.  Consider breaking it down into
-         * smaller methods for better readability and maintainability.
-         * The code for loading and handling messages could potentially be separated into its own method, as it contains a lot of nested logic.
-         * MessLists could be renamed to MessageList for consistency.
-         * */
+//
+        loadMessages();
+
+        log_outIV.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(ChatActivity.this, LoginActivity.class));
+        });
+    }
+    private void loadMessages(){
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -144,12 +145,5 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        log_outIV.setOnClickListener(view -> {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(ChatActivity.this, LoginActivity.class));
-            /*moveTaskToBack(true);
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(1);*/
-        });
     }
 }

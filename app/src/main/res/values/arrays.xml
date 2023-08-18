@@ -1,5 +1,6 @@
 <resources>
     <string-array name="sexuality_options">
+        <item>heterosexual</item>
         <item>Gay</item>
         <item>Lesbian</item>
         <item>Bisexual</item>

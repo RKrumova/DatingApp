@@ -53,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
         checkBox = findViewById(R.id.checkBox);
         button_register = findViewById(R.id.button_register);
         mAuth = FirebaseAuth.getInstance();
-        mLoadingBar = new ProgressDialog(RegisterActivity.this);
+        //mLoadingBar = new ProgressDialog(RegisterActivity.this);
         button_register.setOnClickListener(view -> checkCredentials());
         toLoginTV.setOnClickListener(view -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
 
@@ -75,14 +75,12 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!checkBox.isChecked()) {
             checkBox.setTextColor(Color.RED);
         } else {
-            mLoadingBar.setTitle("Registration");
-            mLoadingBar.setMessage("Please wait, while we check your credentials");
-            mLoadingBar.setCanceledOnTouchOutside(false);
-            mLoadingBar.show();
+            //mLoadingBar.setTitle("Registration");
+            //mLoadingBar.setMessage("Please wait, while we check your credentials");
+            //mLoadingBar.setCanceledOnTouchOutside(false);
+            //mLoadingBar.show();
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    System.out.println("Don't forget to change not to go to MainActivity but to chat/swipe");
-
                     Toast.makeText(RegisterActivity.this, "Successfully registration", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, SettingActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tinder2.Account.FacebookAuthHelper;
+import com.example.tinder2.Account.GoogleAuthHelper;
 import com.example.tinder2.Account.SettingActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -24,8 +26,11 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ProgressDialog mLoadingBar;
     public String username;
+    public String password;
+    private GoogleAuthHelper googleAuthHelper;
+    private FacebookAuthHelper facebookAuthHelper;
 
-    @SuppressLint("MissingInflatedId")
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,18 +47,20 @@ public class LoginActivity extends AppCompatActivity {
         inputUsername = findViewById(R.id.inputUsername);
         inputPassword = findViewById(R.id.inputPassword);
         button_Login = findViewById(R.id.button_Login);
-        TextView toRestartPassTV = findViewById(R.id.toRestartPassTV);
         Button btnGoogle = findViewById(R.id.btnGoogle);
         Button btnFacebook = findViewById(R.id.btnFacebook);
         LinearLayout toRegisterLL = findViewById(R.id.linearLayoutRegister);
         mAuth = FirebaseAuth.getInstance();
         mLoadingBar = new ProgressDialog(LoginActivity.this);
         button_Login.setOnClickListener(view -> checkCredentials());
+        btnGoogle.setOnClickListener(view -> performGoogleSignIn());
+        btnFacebook.setOnClickListener(view -> performFacebookSignIn());
         toRegisterLL.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
     }
 
     private void checkCredentials() {
-        String password = inputPassword.getText().toString();
+        password = inputPassword.getText().toString();
+        username = inputUsername.getText().toString();
         if (username.isEmpty()) {
             showError(inputUsername, "Your email is missing");
         } else if (password.isEmpty()) {
@@ -63,11 +70,8 @@ public class LoginActivity extends AppCompatActivity {
             mLoadingBar.setMessage("Please wait, while we check your credentials");
             mLoadingBar.setCanceledOnTouchOutside(false);
             mLoadingBar.show();
-            username = inputUsername.getText().toString();
-
             mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    System.out.println("Don't forget to change not to go to MainActivity but to chat/swipe");
                     mLoadingBar.dismiss();
                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, SettingActivity.class);
@@ -75,11 +79,11 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("username", username);
                     startActivity(intent);
                 } else {
+                    //mLoadingBar.dismiss();
                     Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
                 }
             });
             Toast.makeText(this, "Call registration method", Toast.LENGTH_SHORT).show();
-            //}
 
         }
     }
@@ -88,5 +92,14 @@ public class LoginActivity extends AppCompatActivity {
         input.setError(s);
         input.requestFocus();
     }
+
+    private void performGoogleSignIn() {
+        //nothing for now
+    }
+
+    private void performFacebookSignIn() {
+        //nothing for now
+    }
+
 }
 
