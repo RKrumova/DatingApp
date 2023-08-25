@@ -20,13 +20,14 @@ import com.example.tinder2.Account.SettingActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText inputUsername;
+    private EditText inputemail;
     private EditText inputPassword;
     private Button button_Login;
     private FirebaseAuth mAuth;
     private ProgressDialog mLoadingBar;
     public String username;
-    public String password;
+    private String email;
+    private String password;
     private GoogleAuthHelper googleAuthHelper;
     private FacebookAuthHelper facebookAuthHelper;
 
@@ -44,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_login);
-        inputUsername = findViewById(R.id.inputUsername);
+        inputemail = findViewById(R.id.inputUsername);
         inputPassword = findViewById(R.id.inputPassword);
         button_Login = findViewById(R.id.button_Login);
         Button btnGoogle = findViewById(R.id.btnGoogle);
@@ -60,9 +61,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void checkCredentials() {
         password = inputPassword.getText().toString();
-        username = inputUsername.getText().toString();
-        if (username.isEmpty()) {
-            showError(inputUsername, "Your email is missing");
+        email = inputemail.getText().toString();
+        if (email.isEmpty()) {
+            showError(inputemail, "Your email is missing");
         } else if (password.isEmpty()) {
             showError(inputPassword, "Your password is missing");
         } else {
@@ -70,12 +71,13 @@ public class LoginActivity extends AppCompatActivity {
             mLoadingBar.setMessage("Please wait, while we check your credentials");
             mLoadingBar.setCanceledOnTouchOutside(false);
             mLoadingBar.show();
-            mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(task -> {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     mLoadingBar.dismiss();
                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, SettingActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    username= extractUsernameFromEmail(email);
                     intent.putExtra("username", username);
                     startActivity(intent);
                 } else {
@@ -83,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
                 }
             });
-            Toast.makeText(this, "Call registration method", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Call login method", Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -99,6 +101,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void performFacebookSignIn() {
         //nothing for now
+    }
+
+    private String extractUsernameFromEmail(String email) {
+        String[] parts = email.split("@");
+        if (parts.length > 0) {
+            // Remove special symbols from the username
+            String username = parts[0].replaceAll("[^a-zA-Z0-9]", "");
+            return username;
+        }
+        return "";
     }
 
 }

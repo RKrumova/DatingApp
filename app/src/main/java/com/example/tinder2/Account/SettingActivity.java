@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -106,7 +107,35 @@ public class SettingActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent1, PICK_IMAGE_REQUEST);
             });
-        //if account already register and set up
+
+        saveChangesButton.setOnClickListener(view -> checkCredentials());
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            profile_imageView.setImageURI(imageUri);
+        }
+    }
+    private void saveImage(){
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("users");
+        UploadTask uploadTask = storageReference.putFile(imageUri);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+                    // Get the download URL of the uploaded image
+                    storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String imageUrl = uri.toString();
+                        // Store the image URL in the user's profile data
+                        databaseReference.child("users").child(username).child("profile_pic").setValue(imageUrl);
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    // Handle error
+                    Log.e("Upload", "Image upload failed: " + e.getMessage());
+                });
+    }
+    //
+    private void loadUserData(){
         if (!MemoryData.getData(this).isEmpty()) {
             databaseReference.child("users").child(username);
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -118,7 +147,7 @@ public class SettingActivity extends AppCompatActivity {
                         selectedSexuality = snapshot.child("sexual_orientation").getValue(String.class);
                         location = snapshot.child("location").getValue(String.class);
                         birthDate = snapshot.child("birthdate").getValue(String.class);
-                        loadUserData(gender, selectedSexuality, location, birthDate);
+                        applyData(gender, selectedSexuality, location, birthDate);
                     }
                 }
                 @Override
@@ -126,18 +155,8 @@ public class SettingActivity extends AppCompatActivity {
                 }
             });
         }
-        saveChangesButton.setOnClickListener(view -> checkCredentials());
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            profile_imageView.setImageURI(imageUri);
-        }
-    }
-
-    private void loadUserData(String gender, String sexuality, String location, String birthdate) {
+    private void applyData(String gender, String sexuality, String location, String birthdate) {
         if (gender.equals("male")) {
             maleRadioButton.setChecked(true);
         } else if (gender.equals("female")) {
@@ -149,10 +168,11 @@ public class SettingActivity extends AppCompatActivity {
         if (sexualityPosition != -1) {
             sexualitySpinner.setSelection(sexualityPosition);
         }
-        addressTV.setText(location);
-        birthDateTV.setText(birthdate);
+        if(location != null && birthdate != null) {
+            addressTV.setText(location);
+            birthDateTV.setText(birthdate);
+        }
     }
-//check box error
 
     public void checkCredentials() {
 
@@ -163,39 +183,18 @@ public class SettingActivity extends AppCompatActivity {
         isOtherChecked = otherRadioButton.isChecked();
         location = addressTV.getText().toString();
         selectedSexuality = sexualitySpinner.getSelectedItem().toString();
-
+        //check here
         if(imageUri != null){
-            //where to save
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference()
-                    .child("username").child("profile_pic")
-                    .child(username + ".jpg"); //name
-            //
-            storageReference.putFile(imageUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Get the download URL of the uploaded image
-                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String imageUrl = uri.toString();
-                            // Store the image URL in the user's profile data
-                            databaseReference.child("users").child(username).child("profile_pic").setValue(imageUrl);
-                        });
-                    })
-                    .addOnFailureListener(e -> {
-                        // Handle error
-                        Log.e("Upload", "Image upload failed: " + e.getMessage());
-                    });
+            saveImage();
         }
-        //nothing is checked
-        //Male and Female
-        //Female and Other
-        //Male and other
         if (!isAgeValid(birthDate)) {
             showError(birthDateTV, "You must be at least 18 years old");
-        } else if (!isMaleChecked && !isFemaleChecked && !isOtherChecked || isMaleChecked && isFemaleChecked && !isOtherChecked || !isMaleChecked && isFemaleChecked && isOtherChecked || isMaleChecked && !isFemaleChecked && isOtherChecked || isMaleChecked && isFemaleChecked) { //all three
+        } else if (!isMaleChecked && !isFemaleChecked && !isOtherChecked || isMaleChecked && isFemaleChecked && !isOtherChecked ||
+                   !isMaleChecked && isFemaleChecked && isOtherChecked || isMaleChecked && !isFemaleChecked && isOtherChecked
+                    || isMaleChecked && isFemaleChecked && isOtherChecked) {
             showGenderError();
         } else if (location.trim().isEmpty()) {
             showError(addressTV, "Please enter a valid address");
-        //} else if (!isSexualOrientationChecked) {
-        //    showSexualOrientationError();
         } else {
             mLoadingBar.setTitle("Updating");
             mLoadingBar.setCanceledOnTouchOutside(false);
@@ -211,30 +210,34 @@ public class SettingActivity extends AppCompatActivity {
             } else {
                 gender = "other";
             }
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    databaseReference.child("users").child(username).child("profile_pic").setValue("");
-                    databaseReference.child("users").child(username).child("gender").setValue(gender);
-                    databaseReference.child("users").child(username).child("sexual_orientation").setValue(selectedSexuality);
-                    databaseReference.child("users").child(username).child("location").setValue(location);
-                    databaseReference.child("users").child(username).child("birthdate").setValue(birthDate);
-                    MemoryData.saveData(username, SettingActivity.this);
-                    //????MemoryData.saveName(nameTxt, SettingActivity.this);
-                    mLoadingBar.dismiss();
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    mLoadingBar.dismiss();
-                }
-            });
-            Intent intent = new Intent(SettingActivity.this, SwipeActivity.class);
-            //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(username, "username");
-            startActivity(intent);
+            saveData();
         }
+    }
+
+    private void saveData(){
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                databaseReference.child("users").child(username).child("gender").setValue(gender);
+                databaseReference.child("users").child(username).child("sexual_orientation").setValue(selectedSexuality);
+                databaseReference.child("users").child(username).child("location").setValue(location);
+                databaseReference.child("users").child(username).child("birthdate").setValue(birthDate);
+                MemoryData.saveData(username, SettingActivity.this);
+                //MemoryData.saveData(username, SettingActivity.this);
+
+                mLoadingBar.dismiss();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                mLoadingBar.dismiss();
+            }
+        });
+        Intent intent = new Intent(SettingActivity.this, SwipeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(username, "username");
+        startActivity(intent);
     }
 
     private boolean isAgeValid(String birthDate) {

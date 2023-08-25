@@ -2,9 +2,12 @@ package com.example.tinder2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 
 public class StatusBars_Activity extends AppCompatActivity {
 
@@ -20,5 +23,19 @@ public class StatusBars_Activity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_status_bars);
+        Button messagesButton = findViewById(R.id.messagesButton);
+        Button profileButton = findViewById(R.id.profileButton);
+        Button datesButton = findViewById(R.id.datesButton);
+        Button swipesButton = findViewById(R.id.swipesButton);
+        swipesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(StatusBars_Activity.this, SwipeActivity.class));
+                //may not eprk
+
+            }
+        });
+
+
     }
 }

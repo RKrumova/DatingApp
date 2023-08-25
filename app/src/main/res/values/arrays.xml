@@ -1,13 +1,11 @@
 <resources>
     <string-array name="sexuality_options">
-        <item>heterosexual</item>
+        <item>Heterosexual</item>
         <item>Gay</item>
         <item>Lesbian</item>
         <item>Bisexual</item>
         <item>Queer</item>
         <item>Asexual</item>
         <item>Aromantic</item>
-        <item>Heterosexual</item>
-        <item>Androsexual</item>
     </string-array>
 </resources>
