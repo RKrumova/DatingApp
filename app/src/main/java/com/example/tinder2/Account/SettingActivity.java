@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tinder2.ChatActivity;
 import com.example.tinder2.R;
 import com.example.tinder2.SwipeActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +42,7 @@ import java.util.Date;
 public class SettingActivity extends AppCompatActivity {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     String username;
+    boolean isNew;
     //profile oic
 
     private ImageView profile_imageView;
@@ -90,10 +92,14 @@ public class SettingActivity extends AppCompatActivity {
         otherRadioButton = findViewById(R.id.otherRadioButton);
         addressTV = findViewById(R.id.address_TV);
         sexualitySpinner = findViewById(R.id.sexualitySpinner);
-        showSexualOrientationCheckBox = findViewById(R.id.showSexualOrientationCheckBox);
         showLocationCheckBox = findViewById(R.id.showLocationCheckBox);
         showGenderCheckBox = findViewById(R.id.showGenderCheckBox);
         saveChangesButton = findViewById(R.id.SaveChangesbutton);
+
+        Button messagesButton = findViewById(R.id.messagesButton);
+        Button profileButton = findViewById(R.id.profileButton);
+        Button datesButton = findViewById(R.id.datesButton);
+        Button swipesButton = findViewById(R.id.swipesButton);
         //sexuality
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sexuality_options, android.R.layout.simple_spinner_item);
@@ -102,6 +108,10 @@ public class SettingActivity extends AppCompatActivity {
         //
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
+        isNew = intent.getBooleanExtra("isNew", false);
+        if(isNew != true){
+            //loadUserData();
+        }
         //upload pic
         profile_imageView.setOnClickListener(view -> {
                 Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -109,6 +119,13 @@ public class SettingActivity extends AppCompatActivity {
             });
 
         saveChangesButton.setOnClickListener(view -> checkCredentials());
+        //
+        messagesButton.setOnClickListener(v->{
+            startActivity(new Intent(SettingActivity.this, ChatActivity.class));
+        });
+        swipesButton.setOnClickListener(v->{
+            startActivity(new Intent(SettingActivity.this, SwipeActivity.class));
+        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

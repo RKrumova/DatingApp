@@ -31,9 +31,7 @@
         <activity
             android:name=".conversation.ConversationActivity"
             android:exported="false" />
-        <activity
-            android:name=".StatusBars_Activity"
-            android:exported="false" />
+
         <activity
             android:name=".ChatActivity"
             android:exported="false" />

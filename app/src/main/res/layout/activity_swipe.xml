@@ -56,18 +56,19 @@
         android:id="@+id/swipeImageView"
         android:layout_width="342dp"
         android:layout_height="359dp"
+        android:layout_marginTop="30dp"
         android:padding="20dp"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.637"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="116dp"
+        app:layout_constraintTop_toBottomOf="@+id/headerLayout"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/newUserTextView"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
         android:text="Some info"
@@ -109,24 +110,62 @@
         android:id="@+id/askButton"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
         android:backgroundTint="@color/bg_color"
         android:text="Ask"
         android:textColor="@color/white"
         app:icon="@drawable/ask"
-        app:layout_constraintBottom_toTopOf="@+id/include2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.534"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/likeButton" />
 
-    <include
-        android:id="@+id/include2"
-        layout="@layout/activity_status_bars"
-        android:layout_width="431dp"
-        android:layout_height="58dp"
+
+    <Button
+        android:id="@+id/swipesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Swipes"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/messagesButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/datesButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Dates"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/profileButton"
+        app:layout_constraintStart_toEndOf="@+id/messagesButton"
+        app:layout_constraintTop_toTopOf="@+id/messagesButton" />
+
+    <Button
+        android:id="@+id/profileButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Profile"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/datesButton"
+        app:layout_constraintTop_toTopOf="@+id/datesButton" />
+
+    <Button
+        android:id="@+id/messagesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Messages"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/swipesButton"
+        app:layout_constraintTop_toTopOf="@+id/swipesButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

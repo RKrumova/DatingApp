@@ -79,11 +79,12 @@ public class RegisterActivity extends AppCompatActivity {
             mLoadingBar.setMessage("Please wait, while we check your credentials");
             mLoadingBar.setCanceledOnTouchOutside(false);
             mLoadingBar.show();
-            mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(task -> {
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "Successfully registration", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, SettingActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("isNew", true);
                     intent.putExtra("username", username);
                     startActivity(intent);
                 } else {

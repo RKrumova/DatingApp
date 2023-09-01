@@ -72,16 +72,16 @@ public class LoginActivity extends AppCompatActivity {
             mLoadingBar.setCanceledOnTouchOutside(false);
             mLoadingBar.show();
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                username= extractUsernameFromEmail(email);
                 if (task.isSuccessful()) {
                     mLoadingBar.dismiss();
                     Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, SettingActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, SwipeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    username= extractUsernameFromEmail(email);
                     intent.putExtra("username", username);
                     startActivity(intent);
                 } else {
-                    //mLoadingBar.dismiss();
+                    mLoadingBar.dismiss();
                     Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
                 }
             });

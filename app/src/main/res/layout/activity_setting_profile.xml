@@ -61,6 +61,7 @@
         android:id="@+id/birthDateTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:hint="yyyy-mm-dd"
         android:layout_marginTop="14dp"
         android:ems="10"
         android:inputType="date"
@@ -118,17 +119,6 @@
         app:layout_constraintTop_toBottomOf="@+id/address_TV" />
 
     <CheckBox
-        android:id="@+id/showSexualOrientationCheckBox"
-        android:layout_width="215dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="20dp"
-        android:text="Show Sexual Orientation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sexualitySpinner" />
-
-    <CheckBox
         android:id="@+id/showLocationCheckBox"
         android:layout_width="124dp"
         android:layout_height="48dp"
@@ -139,30 +129,74 @@
         app:layout_constraintEnd_toStartOf="@+id/showGenderCheckBox"
         app:layout_constraintHorizontal_bias="0.829"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/showSexualOrientationCheckBox" />
+        app:layout_constraintTop_toBottomOf="@+id/sexualitySpinner" />
 
     <CheckBox
         android:id="@+id/showGenderCheckBox"
         android:layout_width="125dp"
         android:layout_height="49dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="70dp"
         android:text="Show Gender"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/showSexualOrientationCheckBox" />
+        app:layout_constraintTop_toTopOf="@+id/showLocationCheckBox" />
 
     <Button
         android:id="@+id/SaveChangesbutton"
         android:layout_width="175dp"
         android:layout_height="65dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="50dp"
         android:backgroundTint="@color/bg_color"
         android:text="Update profile"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/swipesButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/showSexualOrientationCheckBox" />
+        app:layout_constraintTop_toBottomOf="@+id/showGenderCheckBox" />
+    <Button
+        android:id="@+id/swipesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Swipes"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/messagesButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/datesButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Dates"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/profileButton"
+        app:layout_constraintStart_toEndOf="@+id/messagesButton"
+        app:layout_constraintTop_toTopOf="@+id/messagesButton" />
+
+    <Button
+        android:id="@+id/profileButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Profile"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/datesButton"
+        app:layout_constraintTop_toTopOf="@+id/datesButton" />
+
+    <Button
+        android:id="@+id/messagesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Messages"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/swipesButton"
+        app:layout_constraintTop_toTopOf="@+id/swipesButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
