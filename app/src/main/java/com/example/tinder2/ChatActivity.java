@@ -1,5 +1,7 @@
 package com.example.tinder2;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -33,6 +36,7 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
+    FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     //    https://dating-app-bfd70-default-rtdb.firebaseio.com/
     private boolean dataSet;
@@ -57,12 +61,13 @@ public class ChatActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_chat);
-
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReferenceFromUrl("https://dating-app-bfd70-default-rtdb.firebaseio.com/");
         FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+        //databaseReference = firebaseDatabase.getReferenceFromUrl("https://dating-app-bfd70-default-rtdb.firebaseio.com/");
 
         username = getIntent().getStringExtra("username");
+
 
         log_outIV = findViewById(R.id.log_out_imageView);
         messagesRecyclerView = findViewById(R.id.messagesRecyclerView);
@@ -76,9 +81,8 @@ public class ChatActivity extends AppCompatActivity {
         Button datesButton = findViewById(R.id.datesButton);
         Button swipesButton = findViewById(R.id.swipesButton);
 
-        loadPicture();
-        loadLikedUsers();
-
+        //loadPicture();
+        //loadLikedUsers();
         loadMessages();
         swipesButton.setOnClickListener(view -> {
             startActivity(new Intent(ChatActivity.this, SwipeActivity.class));
@@ -92,8 +96,9 @@ public class ChatActivity extends AppCompatActivity {
             startActivity(new Intent(ChatActivity.this, LoginActivity.class));
         });
     }
+
     private void loadMessages() {
-        messLists.clear();
+        //messLists.clear();
         unseenMessages = 0;
         lastMessage = "";
         convoKey = "";
@@ -106,11 +111,9 @@ public class ChatActivity extends AppCompatActivity {
                     if (chatSnapshot.hasChild("user_1") && chatSnapshot.hasChild("user_2") && chatSnapshot.hasChild("convo")) {
                         String getUserOne = chatSnapshot.child("user_1").getValue(String.class);
                         String getUserTwo = chatSnapshot.child("user_2").getValue(String.class);
-
                         if (getUserOne.equals(username) || getUserTwo.equals(username)) {
                             String otherUser = getUserOne.equals(username) ? getUserTwo : getUserOne;
                             String profilePic = snapshot.child(otherUser).child("profile_pic").getValue(String.class);
-
                             for (DataSnapshot messageSnapshot : chatSnapshot.child("messages").getChildren()) {
                                 long messageKey = Long.parseLong(messageSnapshot.getKey());
                                 long lastSeenMessage = Long.parseLong(MemoryData.getLastConvo(ChatActivity.this, chatSnapshot.getKey()));
@@ -127,6 +130,7 @@ public class ChatActivity extends AppCompatActivity {
                             messLists.add(messagesList);
                         }
                     }
+
                 }
 
                 messagesAdapter.updateData(messLists);
@@ -138,24 +142,10 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
-    private void loadLikedUsers() {
-        DatabaseReference swipesReference = databaseReference.child("swipes").child("likes");
-        swipesReference.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<MessagesList> messLists = new ArrayList<>();
-                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    loadMessages();
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error
-            }
-        });
-    }
-
+    /**                         WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY
+     *                         WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY
+     * */
     private void loadPicture(){
         //getting picture from firebase
         final CircleImageView userProfilePic = findViewById(R.id.userProfilePic);

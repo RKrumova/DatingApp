@@ -2,21 +2,21 @@ package com.example.tinder2;
 
 public class SwipeEntry {
     private String username;
-    private String newUser;
+    private String user2;
     private String swipeType;
 
     public SwipeEntry() {
 
     }
 
-    public SwipeEntry(String username, String newUser) {
+    public SwipeEntry(String username, String user2) {
         this.username = username;
-        this.newUser = newUser;
+        this.user2 = user2;
     }
 
-    public SwipeEntry(String username, String newUser, String swipeType) {
+    public SwipeEntry(String username, String user2, String swipeType) {
         this.username = username;
-        this.newUser = newUser;
+        this.user2 = user2;
         this.swipeType = swipeType;
     }
 
@@ -28,12 +28,12 @@ public class SwipeEntry {
         this.username = username;
     }
 
-    public String getNewUser() {
-        return newUser;
+    public String getUser2() {
+        return user2;
     }
 
-    public void setNewUser(String newUser) {
-        this.newUser = newUser;
+    public void setUser2(String newUser) {
+        this.user2 = user2;
     }
 
     public String getSwipeType() {

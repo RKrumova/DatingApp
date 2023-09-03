@@ -1,0 +1,44 @@
+        WORKS   WORKS   WORKS   WORKS
+private void createEmptyChat(String user2) {
+        DatabaseReference chatReference = databaseReference.child("chat");
+
+        // Check if a chat entry already exists for these users
+        chatReference.orderByChild("user_1").equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        // Create an empty chat entry
+                        String chatKey = chatReference.push().getKey();
+                        MessagesList emptyChat = new MessagesList(username, user2, chatKey);
+                        chatReference.child(chatKey).setValue(emptyChat);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "Database error: " + error.getMessage());
+                    }
+                });
+    }
+/** First load users - WORKS    * */
+Can be used if i want to add little icons on top with all liked users for easy access
+    private void loadLikedUsers() {
+        DatabaseReference swipesReference = databaseReference.child("swipes/likes");
+        swipesReference.child("-NdFRvQlAcp70P3ZJ3hQ").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) { // Check if data exists
+                    //List<MessagesList> messLists = new ArrayList<>();
+                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                        //String user = (String) userSnapshot.child("username").getValue();
+                        //createEmptyChat(user);
+                        loadMessages();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Database error: " + error.getMessage());
+            }
+        });
+    }

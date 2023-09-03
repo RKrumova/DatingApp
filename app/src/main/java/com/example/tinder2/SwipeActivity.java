@@ -24,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SwipeActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     DatabaseReference swipesReference;
-    private String newUser = "";
+    private String user2 = "";
     String username;
     private ImageView simpleImageView;
     private TextView newUserTextView;
@@ -58,24 +58,29 @@ public class SwipeActivity extends AppCompatActivity {
         Button profileButton = findViewById(R.id.profileButton);
         Button datesButton = findViewById(R.id.datesButton);
         Button swipesButton = findViewById(R.id.swipesButton);
-        newUser = "check22";
-        loadingUserData(newUser);
+        user2 = "check22";
+        loadingUserData(user2);
         dislikeButton.setOnClickListener(v -> {
             swipesReference = databaseReference.child("swipes").child("dislikes"); // reference to the 'swipes' branch
-            setSwipe(username,  newUser);
+            //setSwipe(username, user2);
             //then load new user
-            newUser = "test123";
-            loadingUserData(newUser);
+            user2 = "test123";
+            loadingUserData(user2);
         });
         likeButton.setOnClickListener(v -> {
             swipesReference = databaseReference.child("swipes").child("likes"); // reference to the 'swipes' branch
-            setSwipe(username,  newUser);
-            newUser = "test123";
+            setSwipe(username, user2, "");
+            user2 = "test123";
+            loadingUserData(user2);
             Toast.makeText(SwipeActivity.this, "Successfully liked", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(SwipeActivity.this, ChatActivity.class));
+            //startActivity(new Intent(SwipeActivity.this, ChatActivity.class));
         });
         askButton.setOnClickListener(v -> {
-            // Handle ask button click
+            swipesReference = databaseReference.child("swipes").child("likes");
+            setSwipe(username, user2, "Do you want to go out?");
+            user2 = "azor1d";
+            loadingUserData(user2);
+            Toast.makeText(SwipeActivity.this, "Liked and asked out uD83D\\uDC97", Toast.LENGTH_SHORT).show();
         });
         messagesButton.setOnClickListener(v->{
             startActivity(new Intent(SwipeActivity.this, ChatActivity.class));
@@ -86,19 +91,53 @@ public class SwipeActivity extends AppCompatActivity {
 
     }
 
+    private void createEmtyConvo(String user1, String user2,String swipeKey, String swipeVal) {
+
+        swipesReference.child("likes").child(swipeKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean convoExist = false;
+                for (DataSnapshot swipeSnapshot : snapshot.getChildren()) {
+                    if (swipeSnapshot.hasChild("user_1") && swipeSnapshot.hasChild("user_2")) {
+                        String getUserOne = swipeSnapshot.child("user_1").getValue(String.class);
+                        String getUserTwo = swipeSnapshot.child("user_2").getValue(String.class);
+                        //checks if already exist convo
+                        if ((getUserOne.equals(user1) && getUserTwo.equals(user2)) || (getUserOne.equals(user2) && getUserTwo.equals(user1))) {
+                            convoExist = true;
+                            break;
+                        }
+                    }
+                }
+            //if the convo doesnt exist, create new one and emty
+                if(convoExist == false){
+                    DatabaseReference chatReference = databaseReference.child("chat").push();
+                    chatReference.child("user_1").setValue(user1);
+                    chatReference.child("user_2").setValue(user2);
+                    chatReference.child("convo").setValue(swipeVal);
+                }
+            }
 
 
-    private void setSwipe(String username, String newUser){
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //something
+
+            }
+        });
+    }
+
+
+    private void setSwipe(String user_1, String user_2, String swipeVal){
             String swipeKey = swipesReference.push().getKey(); // generate a unique key for the swipe
 
             if (swipeKey != null) {
                 // Create a new swipe data
-                SwipeEntry swipeEntry = new SwipeEntry(username, newUser);
-
+                SwipeEntry swipeEntry = new SwipeEntry(user_1, user_2);
                 swipesReference.child(swipeKey).setValue(swipeEntry)
                 //wipesReference.setValue(swipeEntry)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(SwipeActivity.this, "Dislike", Toast.LENGTH_SHORT).show();
+                            createEmtyConvo(user_1, user_2, swipeKey, swipeVal);
+
                         })
                         .addOnFailureListener(e -> {
                             Toast.makeText(SwipeActivity.this, "Failed", Toast.LENGTH_SHORT).show();

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public final class MemoryData {
-
     public static void saveData(String data, Context context) {
         try (FileOutputStream fileOutputStream = context.openFileOutput("data.txt", Context.MODE_PRIVATE)) {
             fileOutputStream.write(data.getBytes());
