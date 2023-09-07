@@ -3,14 +3,17 @@ package com.example.tinder2;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -22,6 +25,7 @@ import com.example.tinder2.messages.MessagesAdapter;
 import com.example.tinder2.messages.MessagesList;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,9 +52,13 @@ public class ChatActivity extends AppCompatActivity {
     private MessagesAdapter messagesAdapter;
     private RecyclerView messagesRecyclerView;
     private ImageView log_outIV;
+    //Log.d("", "");
+    //Log.e(TAG, "I went through onCreate ");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("ChatActivity", "onCreate started");
         super.onCreate(savedInstanceState);
         // Request no title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -64,26 +72,28 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
-        //databaseReference = firebaseDatabase.getReferenceFromUrl("https://dating-app-bfd70-default-rtdb.firebaseio.com/");
 
         username = getIntent().getStringExtra("username");
-
-
         log_outIV = findViewById(R.id.log_out_imageView);
-        messagesRecyclerView = findViewById(R.id.messagesRecyclerView);
-        messagesRecyclerView.setHasFixedSize(true);
-        messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        messagesAdapter = new MessagesAdapter(messLists, ChatActivity.this);
-        messagesRecyclerView.setAdapter(messagesAdapter);
-
         Button messagesButton = findViewById(R.id.messagesButton);
         Button profileButton = findViewById(R.id.profileButton);
         Button datesButton = findViewById(R.id.datesButton);
         Button swipesButton = findViewById(R.id.swipesButton);
 
-        //loadPicture();
+        messagesRecyclerView = findViewById(R.id.messagesRecyclerView);
+
+        messagesRecyclerView.setHasFixedSize(true);
+        messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        messagesAdapter = new MessagesAdapter(messLists, ChatActivity.this);
+        messagesRecyclerView.setAdapter(messagesAdapter);
+        messagesRecyclerView.setVisibility(View.VISIBLE);
+        //loadPicture(username);
         //loadLikedUsers();
+
+        //loadPicture();
+        Log.d("On create Chat Activity", "HI, On create Chat Activity");
         loadMessages();
+
         swipesButton.setOnClickListener(view -> {
             startActivity(new Intent(ChatActivity.this, SwipeActivity.class));
         });
@@ -98,69 +108,81 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void loadMessages() {
-        //messLists.clear();
+        messLists.clear();
         unseenMessages = 0;
         lastMessage = "";
         convoKey = "";
 
         DatabaseReference chatReference = databaseReference.child("chat");
+
+        Log.d("ChatActivity", "About to fetch chats from Firebase");
         chatReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot chatSnapshot : snapshot.getChildren()) {
-                    if (chatSnapshot.hasChild("user_1") && chatSnapshot.hasChild("user_2") && chatSnapshot.hasChild("convo")) {
+                    Log.d("\nChatActivity", "Processing chat ID: " + chatSnapshot.getKey());
+                    if (chatSnapshot.hasChild("user_1") && chatSnapshot.hasChild("user_2") && chatSnapshot.hasChild("messages")) {
                         String getUserOne = chatSnapshot.child("user_1").getValue(String.class);
                         String getUserTwo = chatSnapshot.child("user_2").getValue(String.class);
                         if (getUserOne.equals(username) || getUserTwo.equals(username)) {
-                            String otherUser = getUserOne.equals(username) ? getUserTwo : getUserOne;
-                            String profilePic = snapshot.child(otherUser).child("profile_pic").getValue(String.class);
-                            for (DataSnapshot messageSnapshot : chatSnapshot.child("messages").getChildren()) {
-                                long messageKey = Long.parseLong(messageSnapshot.getKey());
-                                long lastSeenMessage = Long.parseLong(MemoryData.getLastConvo(ChatActivity.this, chatSnapshot.getKey()));
-                                String message = messageSnapshot.child("message").getValue(String.class);
+                            String user2 = getUserOne.equals(username) ? getUserTwo : getUserOne;
+                            String profilePic = "https://cdn-icons-png.flaticon.com/512/1791/1791342.png";
+                            //String profilePic = databaseReference.child(user2).child("profile_pic").getValue(String.class);
+                            DatabaseReference messageReference = chatSnapshot.child("messages").getRef();
+                            messageReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot messageSnapshot) {
+                                    long lastSeenMessage = Long.parseLong(MemoryData.getLastConvo(ChatActivity.this, chatSnapshot.getKey()));
+                                    String message = messageSnapshot.child("text").getValue(String.class);
 
-                                if (messageKey > lastSeenMessage) {
-                                    unseenMessages++;
+                                    long messageKey = Long.parseLong(messageSnapshot.getKey());
+                                    if (messageKey > lastSeenMessage) {
+                                        unseenMessages++;
+                                    }
+
+                                    lastMessage = message;
+
+                                    MessagesList messagesList = new MessagesList(user2, lastMessage, profilePic, unseenMessages, chatSnapshot.getKey());
+                                    messLists.add(messagesList);
+                                    messagesAdapter.updateData(messLists);
                                 }
 
-                                lastMessage = message;
-                            }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            MessagesList messagesList = new MessagesList(otherUser, lastMessage, profilePic, unseenMessages, chatSnapshot.getKey());
-                            messLists.add(messagesList);
+                                }
+                            });
                         }
                     }
-
                 }
-
-                messagesAdapter.updateData(messLists);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle error
+                Log.e("FirebaseError", "Error fetching chat data: ", error.toException());
             }
         });
     }
 
-    /**                         WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY
-     *                         WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY WHY
-     * */
+
     private void loadPicture(){
-        //getting picture from firebase
-        final CircleImageView userProfilePic = findViewById(R.id.userProfilePic);
+
+        CircleImageView profilePic = findViewById(R.id.userProfilePic);
+
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                final String profilePicUrl = snapshot.child("users").child(username).child("profile_pic").getValue(String.class);
-                if (profilePicUrl != null) {
-                    Picasso.get().load(profilePicUrl).into(userProfilePic);
+                if (snapshot.exists()) {
+                    String profilePicUrl = snapshot.child("users").child(username).child("profile_pic").getValue(String.class);
+                    if (profilePicUrl != null) {
+
+                        Picasso.get().load(profilePicUrl).into(profilePic);
+                    }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.d(TAG, error.getMessage());
             }
         });
     }

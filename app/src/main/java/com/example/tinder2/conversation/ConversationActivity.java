@@ -51,7 +51,7 @@ public class ConversationActivity extends AppCompatActivity {
     private TextView nameTextView;
     private Button sendButton;
     private EditText messageET;
-
+    String getUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,73 +78,79 @@ public class ConversationActivity extends AppCompatActivity {
         getProfilePic = getIntent().getStringExtra("profile_pic");
         convoKey = getIntent().getStringExtra("convo_key");
 
+        getUserName = MemoryData.getData(ConversationActivity.this);
         nameTextView.setText(getName);
         Picasso.get().load(getProfilePic).into(profilePic);
 
         convoRecyclerView.setHasFixedSize(true);
         convoRecyclerView.setLayoutManager(new LinearLayoutManager(ConversationActivity.this));
         convoRecyclerView.setAdapter(convoAdapter);
-        assert convoKey != null;
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (convoKey.isEmpty()) {
+        if(convoKey.isEmpty()) {
+
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                     convoKey = "1";
-                    if (snapshot.hasChild("conversation")) {
-                        convoKey = String.valueOf(snapshot.child("conversation").getChildrenCount() + 1);
+                    if (snapshot.hasChild("chat")) {
+                        convoKey = String.valueOf(snapshot.child("chat").getChildrenCount() + 1);
                     }
-                }
-                if (snapshot.hasChild("conversation")) {
-                    if(snapshot.child("conversation").child(convoKey).hasChild("convo")){
-                        convoLists.clear();
-                        for (DataSnapshot messageSnapshot : snapshot.child("conversation").getChildren()) {
-                            if (messageSnapshot.hasChild("message") && messageSnapshot.hasChild("username")) {
-                                String messageTimestamps = messageSnapshot.getKey();
-                                String getUser =  messageSnapshot.child("username").getValue(String.class);
-                                String getMessage =  messageSnapshot.child("message").getValue(String.class);
+                    if (snapshot.hasChild("chat")) {
+                        if (snapshot.child("chat").child(convoKey).hasChild("message")) {
+                            convoLists.clear();
+                            for (DataSnapshot messageSnapshot : snapshot.child("chat").getChildren()) {
+                                if (messageSnapshot.hasChild("message") && messageSnapshot.hasChild("username")) {
+                                    String messageTimestamps = messageSnapshot.getKey();
+                                    String getUser = messageSnapshot.child("username").getValue(String.class);
+                                    String getMessage = messageSnapshot.child("message").getValue(String.class);
 
-                                Timestamp timestamp = new Timestamp(Long.parseLong(Objects.requireNonNull(messageTimestamps)));
-                                Date date = new Date(timestamp.getTime());
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                                SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
-                                ConversationList convoList = new ConversationList(getUser, getMessage, simpleDateFormat.format(date), simpleTimeFormat.format(date));
-                                convoLists.add(convoList);
+                                    Timestamp timestamp = new Timestamp(Long.parseLong(Objects.requireNonNull(messageTimestamps)));
+                                    Date date = new Date(timestamp.getTime());
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                                    SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
+                                    ConversationList convoList = new ConversationList(getUser, getMessage, simpleDateFormat.format(date), simpleTimeFormat.format(date));
+                                    convoLists.add(convoList);
 
 
-                                if( loadingFirstTme || Long.parseLong(messageTimestamps) > Long.parseLong(MemoryData.getLastConvo(ConversationActivity.this, convoKey))){
-                                    loadingFirstTme = false;
-                                    MemoryData.saveConversationLast(messageTimestamps, convoKey, ConversationActivity.this);
-                                    convoAdapter.updateConvoList(convoLists);
-                                    convoRecyclerView.scrollToPosition(convoLists.size() - 1);
+                                    if (loadingFirstTme || Long.parseLong(messageTimestamps) > Long.parseLong(MemoryData.getLastConvo(ConversationActivity.this, convoKey))) {
+                                        loadingFirstTme = false;
+                                        MemoryData.saveConversationLast(messageTimestamps, convoKey, ConversationActivity.this);
+                                        convoAdapter.updateConvoList(convoLists);
+                                        convoRecyclerView.scrollToPosition(convoLists.size() - 1);
+                                    }
                                 }
                             }
                         }
                     }
+
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
 
         sendButton.setOnClickListener(view -> {
+
             String getTxtMessage = String.valueOf(messageET.getText());
             String currentTimestamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
-
-            //MemoryData.saveConversationLast(currentTimestamp, convoKey, ConversationActivity.this);
+            MemoryData.saveConversationLast(currentTimestamp, convoKey, ConversationActivity.this);
 
             if (getName != null) {
-                databaseReference.child("conversation").child(convoKey).child("user_1").setValue(getName);
-                databaseReference.child("conversation").child(convoKey).child("user_2").setValue(getName);
-                databaseReference.child("conversation").child(convoKey).child("user_1").child(getName);
-                databaseReference.child("conversation").child(convoKey).child("user_2").child(getName);
-                databaseReference.child("conversation").child(convoKey).child(currentTimestamp).child("convo").setValue(getTxtMessage);
+                databaseReference.child("chat").child(convoKey).child("user_1").setValue(getName);
+                databaseReference.child("chat").child(convoKey).child("user_2").setValue(getName);
+                databaseReference.child("chat").child(convoKey).child("user_1").child(getName);
+                databaseReference.child("chat").child(convoKey).child("user_2").child(getName);
+                databaseReference.child("chat").child(convoKey).child(currentTimestamp).child("message").setValue(getTxtMessage);
             }
             messageET.setText(""); // clear edit text
         });
+
+
         backButton.setOnClickListener(view -> finish());
     }
+
 }

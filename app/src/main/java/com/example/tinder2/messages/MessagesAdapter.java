@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,16 +31,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     @NonNull
     @Override
     public MessagesAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.messages_adapter_layout, null));
+        Log.d("MessagesAdapter", "onCreateViewHolder called");
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.messages_adapter_layout, parent, false));
     }
-    /**When inflating the layout in onCreateViewHolder,
-     *  consider using
-     *  parent.inflate(R.layout.messages_adapter_layout, parent, false) instead of
-     *  LayoutInflater.from(parent.getContext()).inflate(R.layout.messages_adapter_layout, null). This approach provides the correct parent and avoids potential issues with view recycling.*/
 
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull MessagesAdapter.MyViewHolder holder, int position) {
+        Log.d("MessagesAdapter", "Binding view for position: " + position);
         MessagesList list = messagesLists.get(position);
         if(!list.getProfilePic().isEmpty()){
             Picasso.get().load(list.getProfilePic()).into(holder.profilePic);
@@ -63,8 +62,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
             intent.putExtra("convo_key", list.getConvoKey());
             context.startActivity(intent);
         });
+        Log.d("MessagesAdapter", "Binding view for position: " + position);
+
     }
+    @SuppressLint("NotifyDataSetChanged")
     public void updateData(List<MessagesList> messagesLists){
+        Log.d("MessagesAdapter", "updateData called with " + messagesLists.size() + " messages.");
         this.messagesLists = messagesLists;
         notifyDataSetChanged();
     }

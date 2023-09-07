@@ -141,9 +141,9 @@ public class SettingActivity extends AppCompatActivity {
         uploadTask.addOnSuccessListener(taskSnapshot -> {
                     // Get the download URL of the uploaded image
                     storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String imageUrl = uri.toString();
-                        // Store the image URL in the user's profile data
-                        databaseReference.child("users").child(username).child("profile_pic").setValue(imageUrl);
+                            String imageUrl = uri.toString();
+                            // Store the image URL in the user's profile data
+                            databaseReference.child("users").child(username).child("profile_pic").setValue(imageUrl);
                     });
                 })
                 .addOnFailureListener(e -> {

@@ -18,8 +18,6 @@ public class MessagesList {
         this.convoKey = convoKey;
     }
 
-
-
     public String getUsername() {
         return username;
     }

@@ -1,3 +1,14 @@
+facebook
+/**To opt out of the Advertising ID Permission, add a uses-permission
+ *  element to the manifest after the application element:
+ */
+
+<uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+
+
+
+
+
         WORKS   WORKS   WORKS   WORKS
 private void createEmptyChat(String user2) {
         DatabaseReference chatReference = databaseReference.child("chat");

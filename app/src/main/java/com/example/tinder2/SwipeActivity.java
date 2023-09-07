@@ -1,8 +1,12 @@
 package com.example.tinder2;
 
+
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -10,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tinder2.Account.MemoryData;
 import com.example.tinder2.Account.SettingActivity;
+import com.example.tinder2.conversation.ConversationActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -108,24 +114,36 @@ public class SwipeActivity extends AppCompatActivity {
                         }
                     }
                 }
-            //if the convo doesnt exist, create new one and emty
+                /** if the convo doesnt exist, create new one*/
+
                 if(convoExist == false){
-                    DatabaseReference chatReference = databaseReference.child("chat").push();
+                    String currentTimestamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
+
+                    DatabaseReference chatReference = databaseReference.child("chat").push(); //chat-convoKey
+                    String convoKey = chatReference.getKey();
+                    //set users
                     chatReference.child("user_1").setValue(user1);
                     chatReference.child("user_2").setValue(user2);
-                    chatReference.child("convo").setValue(swipeVal);
+                    DatabaseReference messReference = chatReference.child("messages").child(currentTimestamp);
+                            //branch chat - id - user1, user2, message {ids - current time
+                    if(!swipeVal.isEmpty()){
+                        // chat - convoKey - messages - messageKey
+                        messReference.child("user").setValue(username);
+                        messReference.child("text").setValue(swipeVal);
+                        MemoryData.saveConversationLast(currentTimestamp, convoKey, SwipeActivity.this);
+                    }
                 }
+
             }
 
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                //something
+                Log.d(TAG, error.getDetails());
 
             }
         });
     }
-
 
     private void setSwipe(String user_1, String user_2, String swipeVal){
             String swipeKey = swipesReference.push().getKey(); // generate a unique key for the swipe
@@ -134,7 +152,6 @@ public class SwipeActivity extends AppCompatActivity {
                 // Create a new swipe data
                 SwipeEntry swipeEntry = new SwipeEntry(user_1, user_2);
                 swipesReference.child(swipeKey).setValue(swipeEntry)
-                //wipesReference.setValue(swipeEntry)
                         .addOnSuccessListener(aVoid -> {
                             createEmtyConvo(user_1, user_2, swipeKey, swipeVal);
 
