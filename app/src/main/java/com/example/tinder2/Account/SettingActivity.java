@@ -21,8 +21,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tinder2.ChatActivity;
+import com.example.tinder2.Auth.LoginActivity;
 import com.example.tinder2.R;
 import com.example.tinder2.SwipeActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -98,7 +101,7 @@ public class SettingActivity extends AppCompatActivity {
 
         Button messagesButton = findViewById(R.id.messagesButton);
         Button profileButton = findViewById(R.id.profileButton);
-        Button datesButton = findViewById(R.id.datesButton);
+        Button logOutButton = findViewById(R.id.logOutButton);
         Button swipesButton = findViewById(R.id.swipesButton);
         //sexuality
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -109,8 +112,8 @@ public class SettingActivity extends AppCompatActivity {
         Intent intent = getIntent();
         username = intent.getStringExtra("username");
         isNew = intent.getBooleanExtra("isNew", false);
-        if(isNew != true){
-            //loadUserData();
+        if(!isNew ){
+            loadUserData();
         }
         //upload pic
         profile_imageView.setOnClickListener(view -> {
@@ -126,6 +129,14 @@ public class SettingActivity extends AppCompatActivity {
         swipesButton.setOnClickListener(v->{
             startActivity(new Intent(SettingActivity.this, SwipeActivity.class));
         });
+        logOutButton.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intentLG = new Intent(SettingActivity.this, LoginActivity.class);
+            intentLG.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intentLG.removeExtra(username);
+            startActivity(intentLG);
+        });
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -153,7 +164,6 @@ public class SettingActivity extends AppCompatActivity {
     }
     //
     private void loadUserData(){
-        if (!MemoryData.getData(this).isEmpty()) {
             databaseReference.child("users").child(username);
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -165,6 +175,7 @@ public class SettingActivity extends AppCompatActivity {
                         location = snapshot.child("location").getValue(String.class);
                         birthDate = snapshot.child("birthdate").getValue(String.class);
                         applyData(gender, selectedSexuality, location, birthDate);
+                        loadPicture(snapshot);
                     }
                 }
                 @Override
@@ -172,7 +183,15 @@ public class SettingActivity extends AppCompatActivity {
                 }
             });
         }
+
+    private void loadPicture(DataSnapshot snapshot) {
+            final String profilePicUrl = snapshot.child("profile_pic").getValue(String.class);
+            if (profilePicUrl != null) {
+                Picasso.get().load(profilePicUrl).into(profile_imageView);
+
+        }
     }
+
     private void applyData(String gender, String sexuality, String location, String birthdate) {
         if (gender.equals("male")) {
             maleRadioButton.setChecked(true);

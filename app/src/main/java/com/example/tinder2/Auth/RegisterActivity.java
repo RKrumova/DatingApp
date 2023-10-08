@@ -1,4 +1,4 @@
-package com.example.tinder2;
+package com.example.tinder2.Auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tinder2.Account.SettingActivity;
+import com.example.tinder2.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.apache.commons.lang3.StringUtils;
@@ -81,6 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
             mLoadingBar.show();
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
+                    mLoadingBar.dismiss();
                     Toast.makeText(RegisterActivity.this, "Successfully registration", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(RegisterActivity.this, SettingActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -88,6 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                     intent.putExtra("username", username);
                     startActivity(intent);
                 } else {
+                    mLoadingBar.dismiss();
                     Toast.makeText(RegisterActivity.this, "User registration failed.", Toast.LENGTH_SHORT).show();
                 }
             });

@@ -165,18 +165,6 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/datesButton"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:backgroundTint="@color/bg_color"
-        android:text="Dates"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/profileButton"
-        app:layout_constraintStart_toEndOf="@+id/messagesButton"
-        app:layout_constraintTop_toTopOf="@+id/messagesButton" />
-
-    <Button
         android:id="@+id/profileButton"
         android:layout_width="0dp"
         android:layout_height="56dp"
@@ -184,9 +172,21 @@
         android:text="Profile"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/logOutButton"
+        app:layout_constraintStart_toEndOf="@+id/messagesButton"
+        app:layout_constraintTop_toTopOf="@+id/messagesButton" />
+
+    <Button
+        android:id="@+id/logOutButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Log out"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/datesButton"
-        app:layout_constraintTop_toTopOf="@+id/datesButton" />
+        app:layout_constraintStart_toEndOf="@+id/profileButton"
+        app:layout_constraintTop_toTopOf="@+id/profileButton" />
 
     <Button
         android:id="@+id/messagesButton"

@@ -1,4 +1,4 @@
-package com.example.tinder2.Account;
+package com.example.tinder2.Auth;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;

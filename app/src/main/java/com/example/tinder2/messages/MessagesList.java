@@ -1,20 +1,27 @@
 package com.example.tinder2.messages;
 
 public class MessagesList {
-    private String username, lastMessage, profilePic, convoKey, user_2;
+    private final String username;
+    private String lastMessage;
+    private String profilePic;
+    private final String convoKey;
+    private String user_2;
     private int unseenMessages;
 
-    public MessagesList(String username, String lastMessage,String profilePic, int unseenMessages, String convoKey) {
+//    public MessagesList(String username, String lastMessage,String profilePic, int unseenMessages, String convoKey) {
+//        this.username = username;
+//        this.lastMessage = lastMessage;
+//        this.profilePic = profilePic;
+//        this.unseenMessages = unseenMessages;
+//        this.convoKey = convoKey;
+//
+//    }
+
+    public MessagesList(String username, String lastMessage, int unseenMessages, String profilePic,  String convoKey) {
         this.username = username;
         this.lastMessage = lastMessage;
-        this.profilePic = profilePic;
         this.unseenMessages = unseenMessages;
-        this.convoKey = convoKey;
-
-    }
-    public MessagesList(String username, String user_2, String convoKey){
-        this.username = username;
-        this.user_2 = user_2;
+        this.profilePic = profilePic;
         this.convoKey = convoKey;
     }
 

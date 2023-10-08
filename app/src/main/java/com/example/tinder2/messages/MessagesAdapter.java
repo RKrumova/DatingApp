@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
     private List<MessagesList> messagesLists;
-    private Context context;
+    private final Context context;
 
     public MessagesAdapter(List<MessagesList> messagesLists, Context context) {
         this.messagesLists = messagesLists;
@@ -40,11 +40,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     public void onBindViewHolder(@NonNull MessagesAdapter.MyViewHolder holder, int position) {
         Log.d("MessagesAdapter", "Binding view for position: " + position);
         MessagesList list = messagesLists.get(position);
-        if(!list.getProfilePic().isEmpty()){
+        if (list.getProfilePic() != null && !list.getProfilePic().isEmpty()) {
             Picasso.get().load(list.getProfilePic()).into(holder.profilePic);
         }
+
         holder.username.setText(list.getUsername());
         holder.lastMessage.setText(list.getLastMessage());
+        holder.lastMessage.setVisibility(View.VISIBLE);
+        holder.username.setVisibility(View.VISIBLE);
         if(list.getUnseenMessages() == 0){
             holder.unseenMessages.setVisibility(View.GONE);
             holder.unseenMessages.setText(String.format("%d", list.getUnseenMessages()));
@@ -58,6 +61,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         holder.rootLayout.setOnClickListener(view -> {
             Intent intent = new Intent(context, ConversationActivity.class);
             intent.putExtra("username", list.getUsername());
+            intent.putExtra("user2", list.getUser_2());
             intent.putExtra("profile_pic", list.getProfilePic());
             intent.putExtra("convo_key", list.getConvoKey());
             context.startActivity(intent);
@@ -77,11 +81,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         return messagesLists.size();
     }
     static class MyViewHolder extends  RecyclerView.ViewHolder {
-        private CircleImageView profilePic;
-        private TextView username;
-        private TextView lastMessage;
-        private TextView unseenMessages;
-        private LinearLayout rootLayout ;
+        private final CircleImageView profilePic;
+        private final TextView username;
+        private final TextView lastMessage;
+        private final TextView unseenMessages;
+        private final LinearLayout rootLayout ;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             profilePic = itemView.findViewById(R.id.profilePic);

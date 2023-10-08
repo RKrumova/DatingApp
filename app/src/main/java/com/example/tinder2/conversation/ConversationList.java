@@ -1,7 +1,10 @@
 package com.example.tinder2.conversation;
 
 public class ConversationList {
-    private String username, message, date, time;
+    private final String username;
+    private final String message;
+    private final String date;
+    private final String time;
 
     public ConversationList(String username, String message, String date, String time) {
         this.username = username;

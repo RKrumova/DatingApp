@@ -17,9 +17,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,7 +37,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ConversationActivity extends AppCompatActivity {
-    private final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://dating-app-bfd70-default-rtdb.firebaseio.com/");
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
     private final List<ConversationList> convoLists = new ArrayList<>();
     private ConversationAdapter convoAdapter;
     private RecyclerView convoRecyclerView;
@@ -49,14 +51,14 @@ public class ConversationActivity extends AppCompatActivity {
     private ImageView backButton;
     private CircleImageView profilePic;
     private TextView nameTextView;
-    private Button sendButton;
+    private CircleImageView sendButton;
     private EditText messageET;
     String getUserName;
+    String getUser2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        convoAdapter = new ConversationAdapter(convoLists, ConversationActivity.this);
         // Request no title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         // Set flags for full screen
@@ -66,6 +68,8 @@ public class ConversationActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_conversation);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
         backButton = findViewById(R.id.backButton);
         profilePic = findViewById(R.id.profilePic);
         nameTextView = findViewById(R.id.name);
@@ -77,80 +81,87 @@ public class ConversationActivity extends AppCompatActivity {
         getName = getIntent().getStringExtra("username");
         getProfilePic = getIntent().getStringExtra("profile_pic");
         convoKey = getIntent().getStringExtra("convo_key");
-
+        getUser2 = getIntent().getStringExtra("user2");
         getUserName = MemoryData.getData(ConversationActivity.this);
         nameTextView.setText(getName);
         Picasso.get().load(getProfilePic).into(profilePic);
 
+
+        convoAdapter = new ConversationAdapter(convoLists, ConversationActivity.this, getUserName);
         convoRecyclerView.setHasFixedSize(true);
         convoRecyclerView.setLayoutManager(new LinearLayoutManager(ConversationActivity.this));
         convoRecyclerView.setAdapter(convoAdapter);
-
-        if(convoKey.isEmpty()) {
-
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                    convoKey = "1";
-                    if (snapshot.hasChild("chat")) {
-                        convoKey = String.valueOf(snapshot.child("chat").getChildrenCount() + 1);
-                    }
-                    if (snapshot.hasChild("chat")) {
-                        if (snapshot.child("chat").child(convoKey).hasChild("message")) {
-                            convoLists.clear();
-                            for (DataSnapshot messageSnapshot : snapshot.child("chat").getChildren()) {
-                                if (messageSnapshot.hasChild("message") && messageSnapshot.hasChild("username")) {
-                                    String messageTimestamps = messageSnapshot.getKey();
-                                    String getUser = messageSnapshot.child("username").getValue(String.class);
-                                    String getMessage = messageSnapshot.child("message").getValue(String.class);
-
-                                    Timestamp timestamp = new Timestamp(Long.parseLong(Objects.requireNonNull(messageTimestamps)));
-                                    Date date = new Date(timestamp.getTime());
-                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                                    SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
-                                    ConversationList convoList = new ConversationList(getUser, getMessage, simpleDateFormat.format(date), simpleTimeFormat.format(date));
-                                    convoLists.add(convoList);
-
-
-                                    if (loadingFirstTme || Long.parseLong(messageTimestamps) > Long.parseLong(MemoryData.getLastConvo(ConversationActivity.this, convoKey))) {
-                                        loadingFirstTme = false;
-                                        MemoryData.saveConversationLast(messageTimestamps, convoKey, ConversationActivity.this);
-                                        convoAdapter.updateConvoList(convoLists);
-                                        convoRecyclerView.scrollToPosition(convoLists.size() - 1);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
+        convoRecyclerView.setVisibility(View.VISIBLE);
+        if(!convoKey.isEmpty()){
+            populateConvoList();
         }
-
-
         sendButton.setOnClickListener(view -> {
-
-            String getTxtMessage = String.valueOf(messageET.getText());
-            String currentTimestamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
-            MemoryData.saveConversationLast(currentTimestamp, convoKey, ConversationActivity.this);
-
-            if (getName != null) {
-                databaseReference.child("chat").child(convoKey).child("user_1").setValue(getName);
-                databaseReference.child("chat").child(convoKey).child("user_2").setValue(getName);
-                databaseReference.child("chat").child(convoKey).child("user_1").child(getName);
-                databaseReference.child("chat").child(convoKey).child("user_2").child(getName);
-                databaseReference.child("chat").child(convoKey).child(currentTimestamp).child("message").setValue(getTxtMessage);
-            }
-            messageET.setText(""); // clear edit text
+            sendMessege();
+            populateConvoList();
         });
 
 
         backButton.setOnClickListener(view -> finish());
     }
 
+    private void sendMessege(){
+        String getTxtMessage = String.valueOf(messageET.getText());
+        String currentTimestamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
+        MemoryData.saveConversationLast(currentTimestamp, convoKey, ConversationActivity.this);
+
+        if (getName != null && !getTxtMessage.isEmpty()) {
+            DatabaseReference chatReference = databaseReference.child("chat").child(convoKey).child("messages");
+            Log.e("Database reference in send", chatReference.toString());
+
+            chatReference.child(currentTimestamp);
+            chatReference.child(currentTimestamp).child("user");
+            chatReference.child(currentTimestamp).child("text");
+            chatReference.child(currentTimestamp).child("user").setValue(getUserName);
+            chatReference.child(currentTimestamp).child("text").setValue(getTxtMessage);
+            messageET.setText(""); // clear edit text
+        }
+    }
+    private void populateConvoList() {
+
+        /** populating the convoLists with conversation data from Firebase Realtime Database and
+         * ensuring that new messages are added to the list and displayed in the RecyclerView.
+         * It calculates a unique convoKey if it's initially empty and keeps track of the last
+         * received timestamp to prevent reloading the same messages.
+         * */
+        //chat-convo-message
+        final long[] totalNumber_messages = {0};
+        DatabaseReference chatReference = databaseReference.child("chat").child(convoKey);
+        chatReference.child("messages").addValueEventListener(new ValueEventListener() {
+             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    totalNumber_messages[0] = snapshot.getChildrenCount();
+                    Log.d("Total childs", String.valueOf(totalNumber_messages[0]));
+                    for (DataSnapshot messageSnapshot : snapshot.getChildren()) {
+                        String messageTimestamps = messageSnapshot.getKey();
+                        Log.e("Messages :", messageTimestamps);
+                        if (messageSnapshot.hasChild("text") && messageSnapshot.hasChild("user")) {
+                            String getUser = messageSnapshot.child("user").getValue(String.class);
+                            String getMessage = messageSnapshot.child("message").getValue(String.class);
+                            Timestamp timestamp = new Timestamp(Long.parseLong(Objects.requireNonNull(messageTimestamps)));
+                            Date date = new Date(timestamp.getTime());
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                            SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
+                            ConversationList convoList = new ConversationList(getUser, getMessage, simpleDateFormat.format(date), simpleTimeFormat.format(date));
+                            convoLists.add(convoList);
+                            if (loadingFirstTme || Long.parseLong(messageTimestamps) > Long.parseLong(MemoryData.getLastConvo(ConversationActivity.this, convoKey))) {
+                                loadingFirstTme = false;
+                                MemoryData.saveConversationLast(messageTimestamps, convoKey, ConversationActivity.this);
+                                convoAdapter.updateConvoList(convoLists);
+                                convoRecyclerView.scrollToPosition(convoLists.size() - 1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
 }

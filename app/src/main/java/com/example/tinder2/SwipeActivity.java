@@ -16,7 +16,8 @@ import android.widget.Toast;
 
 import com.example.tinder2.Account.MemoryData;
 import com.example.tinder2.Account.SettingActivity;
-import com.example.tinder2.conversation.ConversationActivity;
+import com.example.tinder2.Auth.LoginActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,10 +63,12 @@ public class SwipeActivity extends AppCompatActivity {
         askButton = findViewById(R.id.askButton);
         Button messagesButton = findViewById(R.id.messagesButton);
         Button profileButton = findViewById(R.id.profileButton);
-        Button datesButton = findViewById(R.id.datesButton);
+        Button logOutButton = findViewById(R.id.logOutButton);
         Button swipesButton = findViewById(R.id.swipesButton);
         user2 = "check22";
         loadingUserData(user2);
+        Intent intent = getIntent();
+        intent.putExtra("username",username);
         dislikeButton.setOnClickListener(v -> {
             swipesReference = databaseReference.child("swipes").child("dislikes"); // reference to the 'swipes' branch
             //setSwipe(username, user2);
@@ -94,7 +97,13 @@ public class SwipeActivity extends AppCompatActivity {
         profileButton.setOnClickListener(v->{
             startActivity(new Intent(SwipeActivity.this, SettingActivity.class));
         });
-
+        logOutButton.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intentLG = new Intent(SwipeActivity.this, LoginActivity.class);
+            intentLG.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intentLG.removeExtra(username);
+            startActivity(intentLG);
+        });
     }
 
     private void createEmtyConvo(String user1, String user2,String swipeKey, String swipeVal) {
@@ -116,7 +125,7 @@ public class SwipeActivity extends AppCompatActivity {
                 }
                 /** if the convo doesnt exist, create new one*/
 
-                if(convoExist == false){
+                if(!convoExist){
                     String currentTimestamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
 
                     DatabaseReference chatReference = databaseReference.child("chat").push(); //chat-convoKey

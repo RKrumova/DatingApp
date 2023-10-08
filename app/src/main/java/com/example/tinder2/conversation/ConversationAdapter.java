@@ -18,9 +18,9 @@ import java.util.List;
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.MyViewHolder> {
     private List<ConversationList> conversationLists;
     private final Context context;
-    private String user;
+    private final String user;
 
-    public ConversationAdapter(List<ConversationList> conversationLists, Context context) {
+    public ConversationAdapter(List<ConversationList> conversationLists, Context context, String user) {
         this.conversationLists = conversationLists;
         this.context = context;
         this.user = MemoryData.getData(context);
@@ -36,6 +36,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     @Override
     public void onBindViewHolder(@NonNull ConversationAdapter.MyViewHolder holder, int position) {
         ConversationList convoList = conversationLists.get(position);
+        String currentUser = convoList.getUsername();
         if(convoList.getUsername().equals(user)){
             holder.myLayout.setVisibility(View.VISIBLE);
             holder.oppoLayout.setVisibility(View.GONE);
@@ -59,12 +60,12 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     }
     static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        private LinearLayout oppoLayout;
-        private LinearLayout myLayout;
-        private TextView oppoMessage;
-        private TextView myMessage;
-        private TextView oppoTime;
-        private  TextView myTime;
+        private final LinearLayout oppoLayout;
+        private final LinearLayout myLayout;
+        private final TextView oppoMessage;
+        private final TextView myMessage;
+        private final TextView oppoTime;
+        private final TextView myTime;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             oppoLayout = itemView.findViewById(R.id.opposideLayout);

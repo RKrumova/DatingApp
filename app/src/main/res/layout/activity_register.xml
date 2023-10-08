@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/bg_second_color"
-    tools:context=".RegisterActivity">
+    tools:context=".Auth.RegisterActivity">
 
     <TextView
         android:id="@+id/tvTitail"

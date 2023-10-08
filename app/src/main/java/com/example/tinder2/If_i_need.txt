@@ -53,3 +53,72 @@ Can be used if i want to add little icons on top with all liked users for easy a
             }
         });
     }
+
+
+
+    /*private void loadMessages() {
+        messLists.clear();
+        unseenMessages = 0;
+        lastMessage = "";
+        convoKey = "";
+
+        Log.d("ChatActivity", "About to fetch chats from Firebase");
+        databaseReference.child("chat").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot chatSnapshot : snapshot.getChildren()) {
+                    Log.d("\nChatActivity", "Processing chat ID: " + chatSnapshot.getKey());
+                    convoKey = chatSnapshot.getKey();
+                    if (chatSnapshot.child(convoKey).hasChild("user_1") && chatSnapshot.hasChild("user_2") && chatSnapshot.hasChild("messages")) {
+                        String getUserOne = chatSnapshot.child("user_1").getValue(String.class);
+                        String getUserTwo = chatSnapshot.child("user_2").getValue(String.class);
+                        assert getUserOne != null;
+                        assert getUserTwo != null;
+                        if (getUserOne.equals(username) || getUserTwo.equals(username)) {
+                            if (getUserOne.equals(username)) {
+                                user2 = getUserTwo;
+                            } else {
+                                user2 = getUserOne;
+                            }
+                            profile2 = databaseReference.child("users").child(user2).child("profile_pic").toString();
+                            String messageKey = chatSnapshot.child("messages").getKey();
+                            //Till here loaded info about users, now we start messages
+                            Log.e("Message key: ", messageKey);
+                            Log.d("Message child? ", String.valueOf(chatSnapshot.child("messages").hasChildren()));
+                            Log.d("TAG", " I am working");
+
+                            DatabaseReference messagesReference = databaseReference.child("chat").child(convoKey).child("messages");
+                            messagesReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot messageSnapshot) {
+                                    //long lastSeenMessage = Long.parseLong(MemoryData.getLastConvo(ChatActivity.this, chatSnapshot.getKey()));
+                                    long messageKeyL = Long.parseLong(Objects.requireNonNull(messageSnapshot.getKey()));
+                                    String message = messageSnapshot.child(messageKey).child("text").getValue(String.class);
+                                        if (messageKey > lastSeenMessage) {
+                                            unseenMessages++;
+                                       }
+                                    lastMessage = message;
+
+                                    MessagesList messagesList = new MessagesList(user2, lastMessage, profile2, chatSnapshot.getKey());
+                                    messLists.add(messagesList);
+                                    messagesAdapter.updateData(messLists);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+                Log.e("FirebaseError", "Error fetching chat data: ", error.toException());
+            }
+        });
+    }
+*/
