@@ -1,10 +1,16 @@
 package com.example.tinder2.Auth;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -14,8 +20,32 @@ import android.widget.Toast;
 
 import com.example.tinder2.R;
 import com.example.tinder2.SwipeActivity;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.bolts.Task;
+import com.facebook.internal.WebDialog;
+import com.facebook.login.LoginResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 public class LoginActivity extends AppCompatActivity {
     private EditText inputemail;
     private EditText inputPassword;
@@ -26,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
     private String email;
     private String password;
     private GoogleAuthHelper googleAuthHelper;
-    private FacebookAuthHelper facebookAuthHelper;
 
 
     @Override
@@ -52,8 +81,13 @@ public class LoginActivity extends AppCompatActivity {
         mLoadingBar = new ProgressDialog(LoginActivity.this);
         button_Login.setOnClickListener(view -> checkCredentials());
         btnGoogle.setOnClickListener(view -> performGoogleSignIn());
-        btnFacebook.setOnClickListener(view -> performFacebookSignIn());
+        btnFacebook.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, FacebookAuthActivity.class)));
         toRegisterLL.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+        //----------------FACEBOOK -----------------------
+        //---------------lOGIN-----------------
+        //btnFacebook.set Read permision
+
+        //--------------REGISTER----------------
     }
 
     private void checkCredentials() {
@@ -95,9 +129,22 @@ public class LoginActivity extends AppCompatActivity {
     private void performGoogleSignIn() {
         //nothing for now
     }
-
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener((Activity) this, (OnCompleteListener<AuthResult>) (bundle) -> {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                });
+        /**                 What should you do
+         *
+         * */
+    }
     private void performFacebookSignIn() {
-        //nothing for now
+        //not
+
     }
 
     private String extractUsernameFromEmail(String email) {

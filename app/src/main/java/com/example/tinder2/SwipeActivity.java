@@ -69,6 +69,11 @@ public class SwipeActivity extends AppCompatActivity {
         loadingUserData(user2);
         Intent intent = getIntent();
         intent.putExtra("username",username);
+        Log.d("intent: ", username);
+        Log.d("intent: ", getIntent().toString());
+        Log.d("intent: ", intent.getExtras().toString());
+
+        // -------- SWIPE BUTTONS -------------------
         dislikeButton.setOnClickListener(v -> {
             swipesReference = databaseReference.child("swipes").child("dislikes"); // reference to the 'swipes' branch
             //setSwipe(username, user2);
@@ -91,7 +96,9 @@ public class SwipeActivity extends AppCompatActivity {
             loadingUserData(user2);
             Toast.makeText(SwipeActivity.this, "Liked and asked out uD83D\\uDC97", Toast.LENGTH_SHORT).show();
         });
+        // ----------BOTTOM NAV PANEL
         messagesButton.setOnClickListener(v->{
+
             startActivity(new Intent(SwipeActivity.this, ChatActivity.class));
         });
         profileButton.setOnClickListener(v->{
@@ -149,14 +156,12 @@ public class SwipeActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d(TAG, error.getDetails());
-
             }
         });
     }
 
     private void setSwipe(String user_1, String user_2, String swipeVal){
             String swipeKey = swipesReference.push().getKey(); // generate a unique key for the swipe
-
             if (swipeKey != null) {
                 // Create a new swipe data
                 SwipeEntry swipeEntry = new SwipeEntry(user_1, user_2);

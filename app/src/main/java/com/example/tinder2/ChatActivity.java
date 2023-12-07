@@ -51,7 +51,6 @@ public class ChatActivity extends AppCompatActivity {
 
 
     //Log.d("", "");
-    //Log.e(TAG, "I went through onCreate ");
 
 
     @Override
@@ -70,12 +69,9 @@ public class ChatActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
-
         Intent intent = getIntent();
-
-        //username = intent.getStringExtra("username");
-        username = "azor1d";
-
+        username = intent.getStringExtra("username");
+        Log.e("Username", username);
         CircleImageView profilePic = findViewById(R.id.userProfilePic);
         Button messagesButton = findViewById(R.id.messagesButton);
         Button profileButton = findViewById(R.id.profileButton);
@@ -142,10 +138,11 @@ public class ChatActivity extends AppCompatActivity {
                             // saving to list
                             MessagesList messagesList = new MessagesList(user2, lastMessage, 1, profile2, actialConvoKey);
                             messLists.add(messagesList);
-                            messagesAdapter.updateData(messLists);
+
                         }
                     }
 
+                    messagesAdapter.updateData(messLists);
                 }
             }
 
