@@ -4,8 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChatActivity">
-<!-- ,,,-->
+    tools:context=".Plans.PlanActivity">
+
+
+
+    <!-- Start here -->
+
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
@@ -32,76 +36,67 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
             android:layout_weight="1.5"
-            android:text="Messages"
+            android:text=""
             android:textSize="30sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/userProfilePic"
+            android:id="@+id/userCancelPic"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
             android:backgroundTint="@color/bg_color"
-            android:src="@drawable/user_icon"
-            android:text="Messages" />
+            android:src="@drawable/user_icon" />
 
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/messagesRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="600dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/swipesButton"
-        app:layout_constraintTop_toBottomOf="@+id/headerLayout" />
-<!-- Start here -->
-
     <Button
-        android:id="@+id/swipesButton"
+        android:id="@+id/rescheduleButton"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
         android:backgroundTint="@color/bg_color"
-        android:text="Swipes"
+        android:text="reschedule"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/messagesButton"
+        app:layout_constraintEnd_toStartOf="@+id/messageButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/profileButton"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:backgroundTint="@color/bg_color"
-        android:text="Profile"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/logOutButton"
-        app:layout_constraintStart_toEndOf="@+id/messagesButton"
-        app:layout_constraintTop_toTopOf="@+id/messagesButton" />
-
-    <Button
-        android:id="@+id/logOutButton"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:backgroundTint="@color/bg_color"
-        android:text="Log out"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profileButton"
-        app:layout_constraintTop_toTopOf="@+id/profileButton" />
-    <Button
-        android:id="@+id/messagesButton"
+        android:id="@+id/CancelButton"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
         android:backgroundTint="@color/bg_color"
-        android:text="Messages"
+        android:text="Cancel"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/swipesButton"
-        app:layout_constraintTop_toTopOf="@+id/swipesButton" />
+        app:layout_constraintEnd_toStartOf="@+id/BackButton"
+        app:layout_constraintStart_toEndOf="@+id/messageButton"
+        app:layout_constraintTop_toTopOf="@+id/messageButton" />
+
+    <Button
+        android:id="@+id/BackButton"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="Back"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/CancelButton"
+        app:layout_constraintTop_toTopOf="@+id/CancelButton" />
+    <Button
+        android:id="@+id/messageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/bg_color"
+        android:text="message"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rescheduleButton"
+        app:layout_constraintTop_toTopOf="@+id/rescheduleButton" />
+
     <!-- End here -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

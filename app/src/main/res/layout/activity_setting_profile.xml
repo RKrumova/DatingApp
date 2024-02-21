@@ -98,12 +98,14 @@
             android:text="Other" />
     </LinearLayout>
 
-    <AutoCompleteTextView
+    <EditText
         android:id="@+id/address_TV"
         android:layout_width="212dp"
         android:layout_height="58dp"
         android:layout_marginTop="15dp"
         android:hint="Address"
+        android:maxLines="1"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/genderLayout" />

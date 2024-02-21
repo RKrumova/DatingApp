@@ -1,4 +1,5 @@
 package com.example.tinder2.Account;
+import static com.example.tinder2.Auth.LoginActivity.username;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -9,7 +10,6 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -43,8 +43,8 @@ import java.util.Date;
 
 
 public class SettingActivity extends AppCompatActivity {
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-    String username;
+    FirebaseDatabase fireDb = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = fireDb.getReference();
     boolean isNew;
     //profile oic
 
@@ -56,7 +56,9 @@ public class SettingActivity extends AppCompatActivity {
     private RadioButton maleRadioButton;
     private RadioButton femaleRadioButton;
     private RadioButton otherRadioButton;
-    private AutoCompleteTextView addressTV;
+    //private AutoCompleteTextView addressTV;
+
+    private EditText addressTV;
     private Spinner sexualitySpinner;
     private CheckBox showSexualOrientationCheckBox;
     private CheckBox showLocationCheckBox;
@@ -110,7 +112,9 @@ public class SettingActivity extends AppCompatActivity {
         sexualitySpinner.setAdapter(adapter);
         //
         Intent intent = getIntent();
-        username = intent.getStringExtra("username");
+
+
+
         isNew = intent.getBooleanExtra("isNew", false);
         if(!isNew ){
             loadUserData();
@@ -164,8 +168,9 @@ public class SettingActivity extends AppCompatActivity {
     }
     //
     private void loadUserData(){
-            databaseReference.child("users").child(username);
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        Log.d("username", username);
+            databaseReference.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
@@ -174,7 +179,9 @@ public class SettingActivity extends AppCompatActivity {
                         selectedSexuality = snapshot.child("sexual_orientation").getValue(String.class);
                         location = snapshot.child("location").getValue(String.class);
                         birthDate = snapshot.child("birthdate").getValue(String.class);
+
                         applyData(gender, selectedSexuality, location, birthDate);
+
                         loadPicture(snapshot);
                     }
                 }

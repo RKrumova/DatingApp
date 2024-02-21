@@ -1,5 +1,5 @@
 package com.example.tinder2;
-
+import static com.example.tinder2.Auth.LoginActivity.username;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
@@ -36,15 +36,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
     final private List<MessagesList> messLists = new ArrayList<>();
-    FirebaseDatabase firebaseDatabase;
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference;
-    //    https://dating-app-bfd70-default-rtdb.firebaseio.com/
     private boolean dataSet;
-    private String username;
     private String convoKey;
     private int unseenMessages;
     private String lastMessage;
-    private String messageKey;
+
     private String user2, profile2, personSending;
     private MessagesAdapter messagesAdapter;
     private RecyclerView messagesRecyclerView;
@@ -67,11 +65,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_chat);
         FirebaseApp.initializeApp(this);
-        firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
-        Intent intent = getIntent();
-        username = intent.getStringExtra("username");
-        Log.e("Username", username);
         CircleImageView profilePic = findViewById(R.id.userProfilePic);
         Button messagesButton = findViewById(R.id.messagesButton);
         Button profileButton = findViewById(R.id.profileButton);
@@ -84,7 +78,7 @@ public class ChatActivity extends AppCompatActivity {
         messagesAdapter = new MessagesAdapter(messLists, ChatActivity.this);
         messagesRecyclerView.setAdapter(messagesAdapter);
         messagesRecyclerView.setVisibility(View.VISIBLE);
-        stuff(username);
+        loadChats(username);
         loadPicture(profilePic, username);
         swipesButton.setOnClickListener(view -> {
             startActivity(new Intent(ChatActivity.this, SwipeActivity.class));
@@ -101,7 +95,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void stuff(String username) {
+    private void loadChats(String username) {
         //messLists.clear();
         unseenMessages = 0;
         lastMessage = "";
@@ -112,6 +106,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot chatSnapshot : snapshot.getChildren()) {
                     if (chatSnapshot.hasChild("user_1") && chatSnapshot.hasChild("user_2") && chatSnapshot.hasChild("messages")) {
+                        //IF exist
                         convoKey = snapshot.getKey();
                         String actialConvoKey = chatSnapshot.getKey();
                         Log.e(convoKey, convoKey);
@@ -124,16 +119,15 @@ public class ChatActivity extends AppCompatActivity {
                         assert getUserTwo != null;
                         if (getUserOne.equals(username) || getUserTwo.equals(username)) {
                             String user2 = getUserOne.equals(username) ? getUserTwo : getUserOne;
-                            Log.d("asdsadsad", user2);
                             profile2 = databaseReference.child("users").child(user2).child("profile_pic").toString();
                             if (profile2.isEmpty()) {
-                                profile2 = "https://images.rawpixel.com/image_png_social_square/cHJpdmF0ZS9sci9pbWFnZJMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png";
+                                profile2 = "https://i.pinimg.com/564x/8f/3d/cc/8f3dccc2ffcb50bd0dc4b56dbb9f3d2b.jpg";
                             }
 
-                            messageKey = chatSnapshot.child("messages").getChildren().toString();
-                            Log.e("Message key: ", messageKey);
+                            //messageKey = chatSnapshot.child("messages").getChildren().toString();
                             if (chatSnapshot.child("messages").hasChildren()) {
-                                loadInsideChat();
+                                Log.e("Message key: ", "Inside if");
+                                loadInsideChat(chatSnapshot.getKey());
                             }
                             // saving to list
                             MessagesList messagesList = new MessagesList(user2, lastMessage, 1, profile2, actialConvoKey);
@@ -153,7 +147,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void loadInsideChat() {
+    private void loadInsideChat(String convoKey) {
         DatabaseReference messageReference = databaseReference.child("chat").child(convoKey).child("messages");
         messageReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -163,7 +157,10 @@ public class ChatActivity extends AppCompatActivity {
                 String messageText = individialMessages.child("text").getValue(String.class);
                 String messageUser = messageSnapshot.child("user").getValue(String.class);
                 Log.d("message content: ", messageText);
-                Log.d("user: ", messageUser);
+                    Log.e("Loading message error ", "In messageUser get null for a value");
+                if(messageUser!= null){
+                    Log.d("user: ", messageUser);
+                }
                 }
 
             }

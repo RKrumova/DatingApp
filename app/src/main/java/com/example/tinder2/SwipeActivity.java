@@ -2,6 +2,8 @@ package com.example.tinder2;
 
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+import static com.example.tinder2.Auth.LoginActivity.username;
+
 
 import android.content.Intent;
 
@@ -29,10 +31,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SwipeActivity extends AppCompatActivity {
+
     DatabaseReference databaseReference;
     DatabaseReference swipesReference;
     private String user2 = "";
-    String username;
+
     private ImageView simpleImageView;
     private TextView newUserTextView;
     private Button logOutButton;
@@ -55,7 +58,7 @@ public class SwipeActivity extends AppCompatActivity {
         final FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReferenceFromUrl("https://dating-app-bfd70-default-rtdb.firebaseio.com/");
         setContentView(R.layout.activity_swipe);
-        username = getIntent().getStringExtra("username");
+        //username = getIntent().getStringExtra("username");
         simpleImageView = findViewById(R.id.swipeImageView);
         newUserTextView = findViewById(R.id.newUserTextView);
         dislikeButton = findViewById(R.id.dislikeButton);
@@ -69,9 +72,7 @@ public class SwipeActivity extends AppCompatActivity {
         loadingUserData(user2);
         Intent intent = getIntent();
         intent.putExtra("username",username);
-        Log.d("intent: ", username);
-        Log.d("intent: ", getIntent().toString());
-        Log.d("intent: ", intent.getExtras().toString());
+
 
         // -------- SWIPE BUTTONS -------------------
         dislikeButton.setOnClickListener(v -> {
@@ -98,7 +99,6 @@ public class SwipeActivity extends AppCompatActivity {
         });
         // ----------BOTTOM NAV PANEL
         messagesButton.setOnClickListener(v->{
-
             startActivity(new Intent(SwipeActivity.this, ChatActivity.class));
         });
         profileButton.setOnClickListener(v->{

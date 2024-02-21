@@ -5,10 +5,7 @@ public class SwipeEntry {
     private String user2;
     private String swipeType;
 
-    public SwipeEntry() {
-
-    }
-
+    public SwipeEntry() {}
     public SwipeEntry(String username, String user2) {
         this.username = username;
         this.user2 = user2;

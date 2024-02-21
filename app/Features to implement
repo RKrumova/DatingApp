@@ -1,0 +1,9 @@
+Dates
+XML file with calendar that shows all events about to happen
+- to it when you click on a date it highlights and shows all the events for that date
+- when you click on an even it opens new Activity View
+XML file - Date/event - shows when, where, with Who { name and profile pic }. Also feature: being able to ask if date is this going to happen
+Button - we okay?
+When clicked it starts a dialog/notification that ask the other user if the date is still happening. Two options yes and reschedule.
+When clicked reschedule you choose to when or where.
+If you want to be cancelled you can choose it, however if you cancellness more than 10 dates you get a time out.

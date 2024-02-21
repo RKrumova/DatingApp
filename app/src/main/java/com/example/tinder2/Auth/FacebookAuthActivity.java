@@ -48,7 +48,6 @@ public class FacebookAuthActivity extends MainActivity {
             @Override
             public void onCancel() {
                 // App code
-
             }
 
             @Override

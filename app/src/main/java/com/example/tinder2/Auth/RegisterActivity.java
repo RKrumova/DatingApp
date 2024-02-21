@@ -88,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("isNew", true);
                     intent.putExtra("username", username);
+
                     startActivity(intent);
                 } else {
                     mLoadingBar.dismiss();
