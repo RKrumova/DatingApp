@@ -9,6 +9,7 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.example.tinder2.Account.MemoryData;
 import com.example.tinder2.Account.SettingActivity;
 import com.example.tinder2.Auth.LoginActivity;
+import com.example.tinder2.Plans.CardActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -92,10 +94,11 @@ public class SwipeActivity extends AppCompatActivity {
         });
         askButton.setOnClickListener(v -> {
             swipesReference = databaseReference.child("swipes").child("likes");
-            setSwipe(username, user2, "Do you want to go out?");
-            user2 = "azor1d";
-            loadingUserData(user2);
-            Toast.makeText(SwipeActivity.this, "Liked and asked out uD83D\\uDC97", Toast.LENGTH_SHORT).show();
+            askOut(v,username, user2);
+            //setSwipe(username, user2, "Do you want to go out?");
+            //user2 = "azor1d";
+            //loadingUserData(user2);
+            //Toast.makeText(SwipeActivity.this, "Liked and asked out uD83D\\uDC97", Toast.LENGTH_SHORT).show();
         });
         // ----------BOTTOM NAV PANEL
         messagesButton.setOnClickListener(v->{
@@ -111,6 +114,11 @@ public class SwipeActivity extends AppCompatActivity {
             intentLG.removeExtra(username);
             startActivity(intentLG);
         });
+    }
+
+    private void askOut(View view, String username, String user2) {
+        CardActivity   cardActivity = new CardActivity();
+        cardActivity.somethingHappening(view, username, user2);
     }
 
     private void createEmtyConvo(String user1, String user2,String swipeKey, String swipeVal) {

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Plans.CardActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/pop_up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        app:cardBackgroundColor="@color/bg_card"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/user_information"
+                android:layout_width="match_parent"
+                android:layout_height="141dp"
+                android:backgroundTint="@color/bg_second_color"
+                android:foregroundTint="@color/bg_second_color">
+
+                <ImageView
+                    android:id="@+id/imageViewPopUp"
+                    android:layout_width="108dp"
+                    android:layout_height="107dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:contentDescription="profile pic"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/user_icon"
+                    tools:ignore="HardcodedText,ImageContrastCheck" />
+
+                <TextView
+                    android:id="@+id/userTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="TextView"
+                    android:textSize="25sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.533"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewPopUp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/userInfoTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="TextView"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.502"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewPopUp"
+                    app:layout_constraintTop_toBottomOf="@+id/userTV"
+                    tools:ignore="HardcodedText" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/important_information"
+                android:layout_width="match_parent"
+                android:layout_height="130dp">
+
+                <EditText
+                    android:id="@+id/editTDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-medium"
+                    android:hint="Enter your date and time"
+                    android:includeFontPadding="true"
+                    android:inputType="datetime"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText" />
+
+                <EditText
+                    android:id="@+id/editAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:ems="10"
+                    android:fontFamily="sans-serif-medium"
+                    android:hint="Location for date"
+                    android:inputType="textPostalAddress"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/editTDate"
+                    app:layout_constraintStart_toStartOf="@+id/editTDate"
+                    app:layout_constraintTop_toBottomOf="@+id/editTDate"
+                    tools:ignore="HardcodedText" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/button_constraint_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/reschedule_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:alpha="100"
+                    android:backgroundTint="@color/bg_color"
+                    android:text="Reschedule"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText,TextContrastCheck"
+                    tools:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/cancel_date_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/bg_color"
+                    android:text="Cancel date"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="@+id/reschedule_button"
+                    app:layout_constraintStart_toStartOf="@+id/reschedule_button"
+                    app:layout_constraintTop_toBottomOf="@+id/reschedule_button"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+
+                <Button
+                    android:id="@+id/yes_date_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/bg_color"
+                    android:text="Agree to a date"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/reschedule_button"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/reschedule_button"
+                    app:layout_constraintTop_toBottomOf="@+id/cancel_date_button"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!--Start of card-->
+
+    <!--end of card-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

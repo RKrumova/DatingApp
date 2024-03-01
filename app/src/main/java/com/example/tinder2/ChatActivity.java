@@ -152,7 +152,6 @@ public class ChatActivity extends AppCompatActivity {
         messageReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot messageSnapshot) {
-                Log.d("\nhi:", "hi" + messageSnapshot.getChildren());
                 for (DataSnapshot individialMessages : messageSnapshot.getChildren()){
                 String messageText = individialMessages.child("text").getValue(String.class);
                 String messageUser = messageSnapshot.child("user").getValue(String.class);
