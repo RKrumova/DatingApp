@@ -94,11 +94,11 @@ public class SwipeActivity extends AppCompatActivity {
         });
         askButton.setOnClickListener(v -> {
             swipesReference = databaseReference.child("swipes").child("likes");
-            askOut(v,username, user2);
-            //setSwipe(username, user2, "Do you want to go out?");
-            //user2 = "azor1d";
+            //askOut(v,username, user2);
+            setSwipe(username, user2, "Do you want to go out?");
+            user2 = "azor1d";
             //loadingUserData(user2);
-            //Toast.makeText(SwipeActivity.this, "Liked and asked out uD83D\\uDC97", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SwipeActivity.this, "Liked and asked out uD83D\\uDC97", Toast.LENGTH_SHORT).show();
         });
         // ----------BOTTOM NAV PANEL
         messagesButton.setOnClickListener(v->{

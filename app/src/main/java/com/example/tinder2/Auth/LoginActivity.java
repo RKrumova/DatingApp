@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -38,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
     private GoogleAuthHelper googleAuthHelper;
 
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,10 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_login);
+
+        sharedPref = getSharedPreferences("myTinder2Prefs", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
+
         inputemail = findViewById(R.id.inputUsername);
         inputPassword = findViewById(R.id.inputPassword);
         button_Login = findViewById(R.id.button_Login);
@@ -72,34 +80,47 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkCredentials() {
-        password = inputPassword.getText().toString();
-        email = inputemail.getText().toString();
-        if (email.isEmpty()) {
-            showError(inputemail, "Your email is missing");
-        } else if (password.isEmpty()) {
-            showError(inputPassword, "Your password is missing");
-        } else {
-            mLoadingBar.setTitle("Login");
-            mLoadingBar.setMessage("Please wait, while we check your credentials");
-            mLoadingBar.setCanceledOnTouchOutside(false);
-            mLoadingBar.show();
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                username= extractUsernameFromEmail(email);
-                if (task.isSuccessful()) {
-                    mLoadingBar.dismiss();
-                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, SwipeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("username", username);
-                    startActivity(intent);
-                } else {
-                    mLoadingBar.dismiss();
-                    Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
-                }
-            });
-            Toast.makeText(this, "Call login method", Toast.LENGTH_SHORT).show();
 
+        try{
+            password = inputPassword.getText().toString();
+            email = inputemail.getText().toString();
+            if (email.isEmpty()) {
+                showError(inputemail, "Your email is missing");
+            } else if (password.isEmpty()) {
+                showError(inputPassword, "Your password is missing");
+            } else {
+                mLoadingBar.setTitle("Login");
+                mLoadingBar.setMessage("Please wait, while we check your credentials");
+                mLoadingBar.setCanceledOnTouchOutside(false);
+                mLoadingBar.show();
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                    username= extractUsernameFromEmail(email);
+
+                    editor.putString("loggedUser", username);
+                    editor.apply();
+                    editor.commit();
+
+
+
+                    if (task.isSuccessful()) {
+                        mLoadingBar.dismiss();
+                        Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, SwipeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("username", username);
+                        startActivity(intent);
+                    } else {
+                        mLoadingBar.dismiss();
+                        Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Toast.makeText(this, "Call login method", Toast.LENGTH_SHORT).show();
+
+            }
+        }catch(Exception e){
+            String bla = e.getMessage();
         }
+
     }
 
     private void showError(EditText input, String s) {

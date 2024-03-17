@@ -26,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -75,10 +76,13 @@ public class ChatActivity extends AppCompatActivity {
         messagesRecyclerView = findViewById(R.id.messagesRecyclerView);
         messagesRecyclerView.setHasFixedSize(true);
         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        loadChats(username);
+
         messagesAdapter = new MessagesAdapter(messLists, ChatActivity.this);
         messagesRecyclerView.setAdapter(messagesAdapter);
         messagesRecyclerView.setVisibility(View.VISIBLE);
-        loadChats(username);
+
+
         loadPicture(profilePic, username);
         swipesButton.setOnClickListener(view -> {
             startActivity(new Intent(ChatActivity.this, SwipeActivity.class));
@@ -113,6 +117,20 @@ public class ChatActivity extends AppCompatActivity {
 
                         String getUserOne = chatSnapshot.child("user_1").getValue(String.class);
                         String getUserTwo = chatSnapshot.child("user_2").getValue(String.class);
+                      //  DataSnapshot messagesSnapshop = (DataSnapshot)chatSnapshot.child("messages").getValue();
+
+
+                        for(DataSnapshot data : chatSnapshot.child("messages").getChildren())
+                        {
+                            //if you call methods on dataSnapshot it gives you the required values
+                            String key = data.getKey(); // then it has the value "somekey4"
+                            String text = data.child(key).child("text").getValue(String.class); // then it has the value "4:"
+
+                            String bla = "";
+                            //as per your given snapshot of firebase database data
+                        }
+
+
                         Log.d("\\ works till here Get users ", getUserOne + " \n" + getUserTwo);
 
                         assert getUserOne != null;
@@ -124,11 +142,16 @@ public class ChatActivity extends AppCompatActivity {
                                 profile2 = "https://i.pinimg.com/564x/8f/3d/cc/8f3dccc2ffcb50bd0dc4b56dbb9f3d2b.jpg";
                             }
 
-                            //messageKey = chatSnapshot.child("messages").getChildren().toString();
-                            if (chatSnapshot.child("messages").hasChildren()) {
-                                Log.e("Message key: ", "Inside if");
-                                loadInsideChat(chatSnapshot.getKey());
-                            }
+                          //  String lastMessage = chatSnapshot.child("messages").getValue();
+                            //Query q = databaseReference.child("chat").child(convoKey).child("message").orderByKey().limitToLast(1);
+                            //while(chatSnapshot.child("messages").getChildren().spliterator()
+                              //  lastMessage = chatSnapshot.child("messages").getChildren().iterator().next().toString();
+                            //}
+//
+//                            if (chatSnapshot.child("messages").hasChildren()) {
+//                                Log.e("Message key: ", "Inside if");
+//                                loadInsideChat(chatSnapshot.getKey());
+//                            }
                             // saving to list
                             MessagesList messagesList = new MessagesList(user2, lastMessage, 1, profile2, actialConvoKey);
                             messLists.add(messagesList);
@@ -136,8 +159,10 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
 
-                    messagesAdapter.updateData(messLists);
                 }
+
+                messagesAdapter.updateData(messLists);
+
             }
 
             @Override
@@ -148,6 +173,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void loadInsideChat(String convoKey) {
+        //final String[] messageText = new String[1];
         DatabaseReference messageReference = databaseReference.child("chat").child(convoKey).child("messages");
         messageReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -159,9 +185,14 @@ public class ChatActivity extends AppCompatActivity {
                     Log.e("Loading message error ", "In messageUser get null for a value");
                 if(messageUser!= null){
                     Log.d("user: ", messageUser);
+                    if (messageText != null) {
+                        lastMessage = messageText;
+                    }
                 }
                 }
 
+                messagesAdapter.notifyDataSetChanged();
+                //lastMessage = messageText[0];
             }
 
             @Override
@@ -169,6 +200,7 @@ public class ChatActivity extends AppCompatActivity {
                 Log.e(TAG, error.getDetails());
             }
         });
+
     }
 
 

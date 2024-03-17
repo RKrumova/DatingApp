@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/rootLayout"
@@ -53,26 +53,28 @@
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/unseenMessages"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="20dp"
-                android:text="1"
-                android:textSize="15sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                android:background="@drawable/baseline_circle_24"
                 android:gravity="center"
-                android:background="@drawable/baseline_circle_24"/>
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
         </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="#14000000"/>
+            android:background="#14000000" />
 
     </LinearLayout>
 </RelativeLayout>

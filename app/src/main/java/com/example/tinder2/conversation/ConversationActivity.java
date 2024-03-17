@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.tinder2.Account.MemoryData;
+import com.example.tinder2.Auth.LoginActivity;
 import com.example.tinder2.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,6 +59,7 @@ public class ConversationActivity extends AppCompatActivity {
     String getUserName;
     String getUser2;
 
+    SharedPreferences sharedPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,9 @@ public class ConversationActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_conversation);
+        sharedPref = getSharedPreferences("myTinder2Prefs", Context.MODE_PRIVATE);
+        getUserName = sharedPref.getString("loggedUser", "");
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
         backButton = findViewById(R.id.backButton);
@@ -82,7 +89,6 @@ public class ConversationActivity extends AppCompatActivity {
         getProfilePic = getIntent().getStringExtra("profile_pic");
         convoKey = getIntent().getStringExtra("convo_key");
         getUser2 = getIntent().getStringExtra("user2");
-        getUserName = MemoryData.getData(ConversationActivity.this);
         nameTextView.setText(getName);
         Picasso.get().load(getProfilePic).into(profilePic);
 
@@ -104,7 +110,8 @@ public class ConversationActivity extends AppCompatActivity {
         backButton.setOnClickListener(view -> finish());
     }
 
-    private void sendMessege(){
+    private void sendMessege()
+    {
         String getTxtMessage = String.valueOf(messageET.getText());
         String currentTimestamp = String.valueOf(System.currentTimeMillis()).substring(0, 10);
         MemoryData.saveConversationLast(currentTimestamp, convoKey, ConversationActivity.this);
@@ -141,7 +148,7 @@ public class ConversationActivity extends AppCompatActivity {
                         Log.e("Messages :", messageTimestamps);
                         if (messageSnapshot.hasChild("text") && messageSnapshot.hasChild("user")) {
                             String getUser = messageSnapshot.child("user").getValue(String.class);
-                            String getMessage = messageSnapshot.child("message").getValue(String.class);
+                            String getMessage = messageSnapshot.child("text").getValue(String.class);
                             Timestamp timestamp = new Timestamp(Long.parseLong(Objects.requireNonNull(messageTimestamps)));
                             Date date = new Date(timestamp.getTime());
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
