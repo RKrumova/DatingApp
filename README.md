@@ -29,4 +29,4 @@ The following technologies were used to create this application:
 - [Firebase](https://firebase.google.com/) - a mobile and web application development platform.
 - [Cucumber](https://cucumber.io/) - a testing tool used for behavior-driven development (BDD) testing.
 - [StarUML](http://staruml.io/) - a software modeling tool used to create UML diagrams for the app's architecture.
-
+- [Meta - DataCamp](https://www.datacamp.com/users/sign_in) - a social media connecting through facebook and instagram teaching and implying data safety protocols and best practices.
